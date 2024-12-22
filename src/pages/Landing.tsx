@@ -2,13 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -20,6 +21,9 @@ const formSchema = z.object({
 
 export default function Landing() {
   const navigate = useNavigate();
+  const { signIn, signUp } = useAuth();
+  const { toast } = useToast();
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -29,11 +33,25 @@ export default function Landing() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    // Here you would typically make an API call to your backend
-    // For now, we'll just redirect to the main page
-    navigate("/");
+  const handleAuth = async (values: z.infer<typeof formSchema>, isLogin: boolean) => {
+    try {
+      if (isLogin) {
+        await signIn(values.email, values.password);
+      } else {
+        await signUp(values.email, values.password);
+      }
+      toast({
+        title: isLogin ? "Login successful" : "Account created successfully",
+        description: "Welcome to Roxio!",
+      });
+      navigate("/");
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "An error occurred during authentication",
+      });
+    }
   };
 
   return (
@@ -63,7 +81,7 @@ export default function Landing() {
               </CardHeader>
               <CardContent>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <form onSubmit={form.handleSubmit((values) => handleAuth(values, true))} className="space-y-4">
                     <FormField
                       control={form.control}
                       name="email"
@@ -105,7 +123,7 @@ export default function Landing() {
               </CardHeader>
               <CardContent>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <form onSubmit={form.handleSubmit((values) => handleAuth(values, false))} className="space-y-4">
                     <FormField
                       control={form.control}
                       name="email"
