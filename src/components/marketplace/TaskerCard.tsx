@@ -11,12 +11,14 @@ interface TaskerCardProps {
 }
 
 export const TaskerCard = ({ name, rating, skills, image, hourlyRate }: TaskerCardProps) => {
+  const initials = name.split(' ').map(n => n[0]).join('');
+  
   return (
     <Card className="p-4 hover:shadow-lg transition-all">
       <div className="flex items-center gap-4">
         <Avatar className="h-16 w-16">
           <AvatarImage src={image} alt={name} />
-          <AvatarFallback>{name[0]}</AvatarFallback>
+          <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
         <div>
           <h3 className="font-semibold text-lg">{name}</h3>
