@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import EmergencyMap from "@/components/EmergencyMap";
 import EmergencyForm from "@/components/EmergencyForm";
 import { toast } from "@/components/ui/use-toast";
-import { MapPin, Phone, Ambulance, Police, FireEngine } from "lucide-react";
+import { MapPin, Phone, Ambulance, Shield, Flame } from "lucide-react";
 
 const Index = () => {
   const [showEmergencyForm, setShowEmergencyForm] = useState(false);
@@ -48,7 +48,7 @@ const Index = () => {
                 className="p-6 cursor-pointer hover:shadow-lg transition-shadow"
                 onClick={() => handleEmergencyClick("police")}
               >
-                <Police className="w-12 h-12 text-blue-600 mb-4" />
+                <Shield className="w-12 h-12 text-blue-600 mb-4" />
                 <h3 className="font-semibold text-lg">Police</h3>
                 <p className="text-sm text-gray-600">Security Emergency</p>
               </Card>
@@ -57,7 +57,7 @@ const Index = () => {
                 className="p-6 cursor-pointer hover:shadow-lg transition-shadow"
                 onClick={() => handleEmergencyClick("fire")}
               >
-                <FireEngine className="w-12 h-12 text-orange-600 mb-4" />
+                <Flame className="w-12 h-12 text-orange-600 mb-4" />
                 <h3 className="font-semibold text-lg">Fire Brigade</h3>
                 <p className="text-sm text-gray-600">Fire Emergency</p>
               </Card>
