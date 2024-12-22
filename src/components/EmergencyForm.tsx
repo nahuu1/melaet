@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
+import EmergencyTracking from "./EmergencyTracking";
 
 interface EmergencyFormProps {
   service: string;
@@ -12,6 +13,7 @@ interface EmergencyFormProps {
 
 const EmergencyForm = ({ service, onClose }: EmergencyFormProps) => {
   const [loading, setLoading] = useState(false);
+  const [showTracking, setShowTracking] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,9 +26,13 @@ const EmergencyForm = ({ service, onClose }: EmergencyFormProps) => {
         description: "Emergency services have been notified and are heading to your location.",
       });
       setLoading(false);
-      onClose();
+      setShowTracking(true);
     }, 2000);
   };
+
+  if (showTracking) {
+    return <EmergencyTracking service={service} onClose={onClose} />;
+  }
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
