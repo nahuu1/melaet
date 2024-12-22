@@ -3,12 +3,13 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyADVa7uL8p8TPSUdT7Lz5JGPyw568TFpCk",
+  authDomain: "mella-49485.firebaseapp.com",
+  projectId: "mella-49485",
+  storageBucket: "mella-49485.appspot.com",
+  messagingSenderId: "741486843182",
+  appId: "1:741486843182:web:c883f79d15a4a1c45a56bf",
+  measurementId: "G-KRN1BDJSVW"
 };
 
 // Initialize Firebase
