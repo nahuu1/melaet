@@ -4,7 +4,9 @@ import { Card } from "@/components/ui/card";
 import EmergencyMap from "@/components/EmergencyMap";
 import EmergencyForm from "@/components/EmergencyForm";
 import { toast } from "@/components/ui/use-toast";
-import { MapPin, Phone, Ambulance, Shield, Flame, User } from "lucide-react";
+import { MapPin, Phone, Ambulance, Shield, Flame, User, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const translations = {
   english: {
@@ -49,12 +51,31 @@ const Index = () => {
   const [showEmergencyForm, setShowEmergencyForm] = useState(false);
   const [selectedService, setSelectedService] = useState("");
   const [language, setLanguage] = useState<"english" | "amharic">("english");
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const t = translations[language];
 
   const handleEmergencyClick = (service: string) => {
     setSelectedService(service);
     setShowEmergencyForm(true);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast({
+        title: "Logged out successfully",
+        description: "You have been logged out of your account",
+      });
+      navigate("/landing");
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error logging out",
+        description: error.message,
+      });
+    }
   };
 
   const toggleLanguage = () => {
@@ -71,11 +92,18 @@ const Index = () => {
       <header className="bg-white shadow-md p-4">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold text-red-600">{t.title}</h1>
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
             <Button variant="outline" onClick={toggleLanguage}>
               {t.language}
             </Button>
-            <Button variant="outline">{t.signIn}</Button>
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={handleLogout}
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </Button>
           </div>
         </div>
       </header>
@@ -89,7 +117,7 @@ const Index = () => {
               <User className="w-6 h-6 text-gray-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-lg">{t.userName}</h3>
+              <h3 className="font-semibold text-lg">{user?.email}</h3>
               <div className="flex items-center gap-2">
                 <span className="text-gray-600">0935344627</span>
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
