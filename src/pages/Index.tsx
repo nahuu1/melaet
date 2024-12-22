@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import EmergencyMap from "@/components/EmergencyMap";
 import EmergencyForm from "@/components/EmergencyForm";
+import { MarketplaceSection } from "@/components/marketplace/MarketplaceSection";
 import { toast } from "@/components/ui/use-toast";
 import { MapPin, Phone, Ambulance, Shield, Flame, User, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -10,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const translations = {
   english: {
-    title: "Ethio Alert",
+    title: "Mella",
     language: "አማርኛ",
     signIn: "Sign In",
     emergencyServices: "Emergency Services",
@@ -91,7 +92,7 @@ const Index = () => {
       {/* Header */}
       <header className="bg-white shadow-md p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-red-600">{t.title}</h1>
+          <h1 className="text-2xl font-bold text-red-600 font-['Nyala']">{t.title}</h1>
           <div className="flex gap-4 items-center">
             <Button variant="outline" onClick={toggleLanguage}>
               {t.language}
@@ -128,7 +129,10 @@ const Index = () => {
           </div>
         </Card>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        {/* Marketplace Section */}
+        <MarketplaceSection />
+
+        <div className="grid md:grid-cols-2 gap-8 mt-12">
           {/* Emergency Services */}
           <div className="space-y-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6">{t.emergencyServices}</h2>
