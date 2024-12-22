@@ -1,17 +1,12 @@
 import { BrowserRouter as Router } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
 import Index from './pages/Index';
-import { Toaster } from './components/ui/toaster';
 import './App.css';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Index />
-        <Toaster />
-      </Router>
-    </AuthProvider>
+    <Router>
+      <Index />
+    </Router>
   );
 }
 
