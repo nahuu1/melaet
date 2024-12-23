@@ -1,11 +1,11 @@
 import { BrowserRouter as Router } from 'react-router-dom';
-import Landing from './pages/Landing';
+import Index from './pages/Index';
 import './App.css';
 
 function App() {
   return (
     <Router>
-      <Landing />
+      <Index />
     </Router>
   );
 }
