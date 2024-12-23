@@ -44,7 +44,7 @@ export default function Landing() {
         title: isLogin ? "Login successful" : "Account created successfully",
         description: "Welcome to Mella!",
       });
-      navigate("/");
+      navigate("/home");
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -55,26 +55,30 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      {/* Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-32 bg-green-500/10 transform -skew-y-6" />
+      <div className="absolute bottom-0 right-0 w-full h-32 bg-green-500/10 transform skew-y-6" />
+      
+      <div className="w-full max-w-md space-y-8 relative z-10">
         <div className="text-center">
           <img 
             src="/lovable-uploads/mella-logo.png" 
             alt="Mella Logo" 
             className="mx-auto w-32 h-32 mb-4"
           />
-          <h1 className="text-4xl font-bold mb-2">Welcome to Mella</h1>
-          <p className="text-muted-foreground">Your trusted emergency response platform</p>
+          <h1 className="text-4xl font-bold mb-2 text-green-800">Welcome to Mella</h1>
+          <p className="text-green-600">Your trusted emergency response platform</p>
         </div>
 
         <Tabs defaultValue="login" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 bg-green-50">
+            <TabsTrigger value="login" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">Login</TabsTrigger>
+            <TabsTrigger value="signup" className="data-[state=active]:bg-green-500 data-[state=active]:text-white">Sign Up</TabsTrigger>
           </TabsList>
 
           <TabsContent value="login">
-            <Card>
+            <Card className="border-green-100">
               <CardHeader>
                 <CardTitle>Login</CardTitle>
                 <CardDescription>Enter your credentials to access your account</CardDescription>
@@ -89,7 +93,7 @@ export default function Landing() {
                         <FormItem>
                           <FormLabel>Email</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter your email" {...field} />
+                            <Input placeholder="Enter your email" className="border-green-200 focus:border-green-500" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -102,13 +106,13 @@ export default function Landing() {
                         <FormItem>
                           <FormLabel>Password</FormLabel>
                           <FormControl>
-                            <Input type="password" placeholder="Enter your password" {...field} />
+                            <Input type="password" placeholder="Enter your password" className="border-green-200 focus:border-green-500" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full">Login</Button>
+                    <Button type="submit" className="w-full bg-green-500 hover:bg-green-600">Login</Button>
                   </form>
                 </Form>
               </CardContent>
@@ -116,7 +120,7 @@ export default function Landing() {
           </TabsContent>
 
           <TabsContent value="signup">
-            <Card>
+            <Card className="border-green-100">
               <CardHeader>
                 <CardTitle>Create an account</CardTitle>
                 <CardDescription>Enter your details to get started</CardDescription>
@@ -131,7 +135,7 @@ export default function Landing() {
                         <FormItem>
                           <FormLabel>Email</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter your email" {...field} />
+                            <Input placeholder="Enter your email" className="border-green-200 focus:border-green-500" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -144,7 +148,7 @@ export default function Landing() {
                         <FormItem>
                           <FormLabel>Phone Number</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter your phone number" {...field} />
+                            <Input placeholder="Enter your phone number" className="border-green-200 focus:border-green-500" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -157,13 +161,13 @@ export default function Landing() {
                         <FormItem>
                           <FormLabel>Password</FormLabel>
                           <FormControl>
-                            <Input type="password" placeholder="Create a password" {...field} />
+                            <Input type="password" placeholder="Create a password" className="border-green-200 focus:border-green-500" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" className="w-full">Sign Up</Button>
+                    <Button type="submit" className="w-full bg-green-500 hover:bg-green-600">Sign Up</Button>
                   </form>
                 </Form>
               </CardContent>
@@ -171,8 +175,8 @@ export default function Landing() {
           </TabsContent>
         </Tabs>
       </div>
-      <footer className="fixed bottom-0 w-full p-4 text-center bg-background/80 backdrop-blur-sm">
-        <p className="text-sm text-muted-foreground">Made by Tech Space ET</p>
+      <footer className="fixed bottom-0 w-full p-4 text-center bg-white/80 backdrop-blur-sm">
+        <p className="text-sm text-green-600">Made by Tech Space ET</p>
       </footer>
     </div>
   );
