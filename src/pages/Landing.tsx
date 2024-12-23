@@ -42,7 +42,7 @@ export default function Landing() {
       }
       toast({
         title: isLogin ? "Login successful" : "Account created successfully",
-        description: "Welcome to Roxio!",
+        description: "Welcome to Mella!",
       });
       navigate("/");
     } catch (error: any) {
@@ -59,11 +59,11 @@ export default function Landing() {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <img 
-            src="/lovable-uploads/e000a951-4693-4da9-b48d-762c01c76987.png" 
-            alt="Roxio Logo" 
+            src="/lovable-uploads/mella-logo.png" 
+            alt="Mella Logo" 
             className="mx-auto w-32 h-32 mb-4"
           />
-          <h1 className="text-4xl font-bold mb-2">Welcome to Roxio</h1>
+          <h1 className="text-4xl font-bold mb-2">Welcome to Mella</h1>
           <p className="text-muted-foreground">Your trusted emergency response platform</p>
         </div>
 
@@ -171,6 +171,9 @@ export default function Landing() {
           </TabsContent>
         </Tabs>
       </div>
+      <footer className="fixed bottom-0 w-full p-4 text-center bg-background/80 backdrop-blur-sm">
+        <p className="text-sm text-muted-foreground">Made by Tech Space ET</p>
+      </footer>
     </div>
   );
 }
