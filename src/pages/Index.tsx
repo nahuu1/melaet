@@ -1,19 +1,18 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import EmergencyMap from "@/components/EmergencyMap";
-import EmergencyForm from "@/components/EmergencyForm";
-import { MarketplaceSection } from "@/components/marketplace/MarketplaceSection";
+import { Phone, LogOut } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
-import { MapPin, Phone, Ambulance, Shield, Flame, User, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import EmergencyForm from "@/components/EmergencyForm";
+import { MarketplaceSection } from "@/components/marketplace/MarketplaceSection";
+import UserProfile from "@/components/UserProfile";
+import EmergencyServices from "@/components/EmergencyServices";
 
 const translations = {
   english: {
     title: "Mella",
     language: "አማርኛ",
-    signIn: "Sign In",
     emergencyServices: "Emergency Services",
     ambulance: "Ambulance",
     medicalEmergency: "Medical Emergency",
@@ -25,13 +24,11 @@ const translations = {
     trafficEmergency: "Traffic Emergency",
     emergencyHotline: "Emergency Hotline",
     callNow: "Call Now",
-    userName: "Nahusenay Zewdu",
     userStatus: "Active",
   },
   amharic: {
     title: "ኢትዮ አለርት",
     language: "English",
-    signIn: "ግባ",
     emergencyServices: "የድንገተኛ አደጋ አገልግሎቶች",
     ambulance: "አምቡላንስ",
     medicalEmergency: "የሕክምና አደጋ",
@@ -43,7 +40,6 @@ const translations = {
     trafficEmergency: "የትራፊክ አደጋ",
     emergencyHotline: "የአደጋ ጊዜ የስልክ መስመር",
     callNow: "አሁን ይደውሉ",
-    userName: "ናሁሰናይ ዘውዱ",
     userStatus: "አክቲቭ",
   }
 };
@@ -111,98 +107,46 @@ const Index = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        {/* User Information */}
-        <Card className="p-4 mb-6">
-          <div className="flex items-center gap-4">
-            <div className="bg-gray-100 p-3 rounded-full">
-              <User className="w-6 h-6 text-gray-600" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg">{user?.email}</h3>
-              <div className="flex items-center gap-2">
-                <span className="text-gray-600">0935344627</span>
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                  {t.userStatus}
-                </span>
+        {/* User Profile */}
+        <UserProfile 
+          email={user?.email} 
+          language={language}
+          translations={t}
+        />
+
+        {/* Emergency Services */}
+        <EmergencyServices 
+          onEmergencyClick={handleEmergencyClick}
+          translations={t}
+        />
+
+        {/* Quick Call */}
+        <div className="mt-8">
+          <Card className="p-6 bg-red-50">
+            <div className="flex items-center gap-4">
+              <Phone className="w-8 h-8 text-red-600" />
+              <div>
+                <h3 className="font-semibold">{t.emergencyHotline}</h3>
+                <p className="text-red-600 font-bold">911</p>
               </div>
+              <Button 
+                className="ml-auto"
+                variant="destructive"
+                onClick={() => {
+                  toast({
+                    title: "Calling Emergency Services",
+                    description: "Connecting to the nearest dispatcher...",
+                  });
+                }}
+              >
+                {t.callNow}
+              </Button>
             </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
 
         {/* Marketplace Section */}
         <MarketplaceSection />
-
-        <div className="grid md:grid-cols-2 gap-8 mt-12">
-          {/* Emergency Services */}
-          <div className="space-y-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">{t.emergencyServices}</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <Card 
-                className="p-6 cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => handleEmergencyClick("ambulance")}
-              >
-                <Ambulance className="w-12 h-12 text-red-600 mb-4" />
-                <h3 className="font-semibold text-lg">{t.ambulance}</h3>
-                <p className="text-sm text-gray-600">{t.medicalEmergency}</p>
-              </Card>
-
-              <Card 
-                className="p-6 cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => handleEmergencyClick("police")}
-              >
-                <Shield className="w-12 h-12 text-blue-600 mb-4" />
-                <h3 className="font-semibold text-lg">{t.police}</h3>
-                <p className="text-sm text-gray-600">{t.securityEmergency}</p>
-              </Card>
-
-              <Card 
-                className="p-6 cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => handleEmergencyClick("fire")}
-              >
-                <Flame className="w-12 h-12 text-orange-600 mb-4" />
-                <h3 className="font-semibold text-lg">{t.fireBrigade}</h3>
-                <p className="text-sm text-gray-600">{t.fireEmergency}</p>
-              </Card>
-
-              <Card 
-                className="p-6 cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => handleEmergencyClick("traffic")}
-              >
-                <MapPin className="w-12 h-12 text-green-600 mb-4" />
-                <h3 className="font-semibold text-lg">{t.trafficPolice}</h3>
-                <p className="text-sm text-gray-600">{t.trafficEmergency}</p>
-              </Card>
-            </div>
-
-            {/* Quick Call */}
-            <Card className="p-6 bg-red-50">
-              <div className="flex items-center gap-4">
-                <Phone className="w-8 h-8 text-red-600" />
-                <div>
-                  <h3 className="font-semibold">{t.emergencyHotline}</h3>
-                  <p className="text-red-600 font-bold">911</p>
-                </div>
-                <Button 
-                  className="ml-auto"
-                  variant="destructive"
-                  onClick={() => {
-                    toast({
-                      title: "Calling Emergency Services",
-                      description: "Connecting to the nearest dispatcher...",
-                    });
-                  }}
-                >
-                  {t.callNow}
-                </Button>
-              </div>
-            </Card>
-          </div>
-
-          {/* Map Section */}
-          <div className="h-[600px] rounded-lg overflow-hidden shadow-lg">
-            <EmergencyMap />
-          </div>
-        </div>
 
         {/* Emergency Form Dialog */}
         {showEmergencyForm && (
