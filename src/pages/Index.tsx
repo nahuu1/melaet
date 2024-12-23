@@ -8,6 +8,7 @@ import EmergencyForm from "@/components/EmergencyForm";
 import { MarketplaceSection } from "@/components/marketplace/MarketplaceSection";
 import UserProfile from "@/components/UserProfile";
 import EmergencyServices from "@/components/EmergencyServices";
+import { Card } from "@/components/ui/card"; // Added the missing import
 
 const translations = {
   english: {
