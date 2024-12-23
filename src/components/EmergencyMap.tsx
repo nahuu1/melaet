@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
-import { MapPin, Phone, User } from "lucide-react";
+import { MapPin, Phone, User, MessageCircle, Navigation, ArrowLeft } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface EmergencyWorker {
   id: number;
@@ -12,9 +14,24 @@ interface EmergencyWorker {
   yearsOfExperience: number;
 }
 
+interface ChatMessage {
+  id: number;
+  sender: string;
+  message: string;
+  timestamp: string;
+}
+
 const EmergencyMap = () => {
   const [workers, setWorkers] = useState<EmergencyWorker[]>([]);
+  const [selectedWorker, setSelectedWorker] = useState<EmergencyWorker | null>(null);
+  const [showNavigation, setShowNavigation] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const userLocation = { lat: -8.783195, lng: 34.508523 };
+  const [chatHistory] = useState<ChatMessage[]>([
+    { id: 1, sender: "Worker", message: "I'm on my way!", timestamp: "10:30 AM" },
+    { id: 2, sender: "You", message: "Please hurry!", timestamp: "10:31 AM" },
+    { id: 3, sender: "Worker", message: "ETA 5 minutes", timestamp: "10:32 AM" },
+  ]);
 
   useEffect(() => {
     // Simulate nearby emergency workers
@@ -96,8 +113,22 @@ const EmergencyMap = () => {
     setWorkers(mockWorkers);
   }, []);
 
+  const handleWorkerSelect = (worker: EmergencyWorker) => {
+    setSelectedWorker(worker);
+    setShowNavigation(true);
+  };
+
   return (
     <div className="space-y-4">
+      <Button 
+        variant="outline" 
+        className="mb-4"
+        onClick={() => window.history.back()}
+      >
+        <ArrowLeft className="w-4 h-4 mr-2" />
+        Back
+      </Button>
+
       {/* Map */}
       <div className="w-full h-[400px] relative bg-gray-100 rounded-lg overflow-hidden">
         <iframe
@@ -139,13 +170,90 @@ const EmergencyMap = () => {
                   </div>
                 </div>
               </div>
-              <button className="bg-green-100 p-2 rounded-full hover:bg-green-200 transition-colors">
-                <Phone className="w-5 h-5 text-green-600" />
-              </button>
+              <div className="flex gap-2">
+                <button 
+                  className="bg-green-100 p-2 rounded-full hover:bg-green-200 transition-colors"
+                  onClick={() => handleWorkerSelect(worker)}
+                >
+                  <Navigation className="w-5 h-5 text-green-600" />
+                </button>
+                <button 
+                  className="bg-blue-100 p-2 rounded-full hover:bg-blue-200 transition-colors"
+                  onClick={() => setShowChat(true)}
+                >
+                  <MessageCircle className="w-5 h-5 text-blue-600" />
+                </button>
+              </div>
             </div>
           </Card>
         ))}
       </div>
+
+      {/* Navigation Dialog */}
+      <Dialog open={showNavigation} onOpenChange={setShowNavigation}>
+        <DialogContent className="sm:max-w-[425px]">
+          <div className="h-[400px] relative bg-gray-100 rounded-lg overflow-hidden mb-4">
+            <iframe
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=${
+                userLocation.lng - 0.02
+              },${
+                userLocation.lat - 0.02
+              },${
+                userLocation.lng + 0.02
+              },${
+                userLocation.lat + 0.02
+              }&layer=mapnik&marker=${userLocation.lat},${userLocation.lng}`}
+              className="w-full h-full border-none"
+            />
+          </div>
+          <div className="flex gap-4">
+            <Button className="flex-1" onClick={() => setShowNavigation(false)}>
+              <Phone className="w-4 h-4 mr-2" />
+              Voice Call
+            </Button>
+            <Button 
+              variant="destructive" 
+              className="flex-1"
+              onClick={() => setShowNavigation(false)}
+            >
+              End Call
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Chat History Dialog */}
+      <Dialog open={showChat} onOpenChange={setShowChat}>
+        <DialogContent className="sm:max-w-[425px]">
+          <div className="space-y-4">
+            {chatHistory.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${
+                  message.sender === "You" ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`rounded-lg p-3 max-w-[80%] ${
+                    message.sender === "You"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-gray-100"
+                  }`}
+                >
+                  <p className="text-sm font-semibold">{message.sender}</p>
+                  <p>{message.message}</p>
+                  <p className="text-xs text-gray-500 mt-1">{message.timestamp}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Footer */}
+      <footer className="mt-8 text-center text-gray-600 py-4 border-t">
+        Made by Tech Space ET
+      </footer>
     </div>
   );
 };
