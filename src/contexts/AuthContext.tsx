@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
 import { User } from 'firebase/auth';
 
