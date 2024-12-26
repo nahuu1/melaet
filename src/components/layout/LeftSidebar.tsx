@@ -1,9 +1,8 @@
-import { UserProfile } from "../user/UserProfile";
-import { EmergencyButtons } from "../emergency/EmergencyButtons";
+import { UserProfile } from "@/components/user/UserProfile";
+import { EmergencyButtons } from "@/components/emergency/EmergencyButtons";
 
 interface LeftSidebarProps {
   isOpen: boolean;
-  onToggle: () => void;
 }
 
 export const LeftSidebar = ({ isOpen }: LeftSidebarProps) => {
