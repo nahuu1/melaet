@@ -1,4 +1,7 @@
 import { User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 interface OnlineUser {
   id: string;
@@ -7,19 +10,36 @@ interface OnlineUser {
   status: "online" | "away" | "offline";
 }
 
-const mockUsers: OnlineUser[] = [
-  { id: "1", name: "John Doe", status: "online" },
-  { id: "2", name: "Jane Smith", status: "away" },
-  // Add more mock users as needed
-];
+interface OnlineUsersProps {
+  onUserClick?: (userId: string) => void;
+}
 
-export const OnlineUsers = () => {
+export const OnlineUsers = ({ onUserClick }: OnlineUsersProps) => {
+  const [users, setUsers] = useState<OnlineUser[]>([]);
+
+  useEffect(() => {
+    const q = query(collection(db, "users"), where("status", "==", "online"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const onlineUsers = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as OnlineUser));
+      setUsers(onlineUsers);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className="mb-6">
       <h2 className="text-lg font-semibold mb-4">Online Users</h2>
       <div className="space-y-3">
-        {mockUsers.map((user) => (
-          <div key={user.id} className="flex items-center gap-3">
+        {users.map((user) => (
+          <div 
+            key={user.id} 
+            className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded-lg"
+            onClick={() => onUserClick?.(user.id)}
+          >
             <div className="relative">
               {user.avatar ? (
                 <img 
