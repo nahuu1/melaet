@@ -12,7 +12,7 @@ export const MainLayout = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <div className="flex">
-        <LeftSidebar isOpen={showLeftSidebar} onToggle={() => setShowLeftSidebar(!showLeftSidebar)} />
+        <LeftSidebar isOpen={showLeftSidebar} />
         <MainContent />
         <RightSidebar isOpen={showRightSidebar} onToggle={() => setShowRightSidebar(!showRightSidebar)} />
       </div>
