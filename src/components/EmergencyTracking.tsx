@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Phone, PhoneOff } from "lucide-react";
+import { Phone, PhoneOff, ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface EmergencyTrackingProps {
@@ -51,6 +51,14 @@ const EmergencyTracking = ({ service, onClose }: EmergencyTrackingProps) => {
       <DialogContent className="sm:max-w-[425px] h-[600px] flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-center text-xl">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="absolute left-4 top-4"
+              onClick={onClose}
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
             Tracking {service.charAt(0).toUpperCase() + service.slice(1)} Response
           </DialogTitle>
         </DialogHeader>
@@ -116,24 +124,12 @@ const EmergencyTracking = ({ service, onClose }: EmergencyTrackingProps) => {
             <p className="text-lg font-bold">{eta} mins away</p>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
-            <Button variant="outline" className="w-full">
-              Economy
-            </Button>
-            <Button variant="outline" className="w-full">
-              Luxury
-            </Button>
-            <Button variant="outline" className="w-full">
-              Family
-            </Button>
-          </div>
-
           <div className="flex gap-4">
             <Button className="flex-1 bg-green-500 hover:bg-green-600">
               <Phone className="w-4 h-4 mr-2" />
               Voice Call
             </Button>
-            <Button variant="destructive" className="flex-1">
+            <Button variant="destructive" className="flex-1" onClick={onClose}>
               <PhoneOff className="w-4 h-4 mr-2" />
               End Call
             </Button>

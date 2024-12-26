@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
-import { MapPin, Phone, User, MessageCircle, Navigation, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import EmergencyWorkerCard from "./emergency/EmergencyWorkerCard";
+import ChatDialog from "./emergency/ChatDialog";
 
 interface EmergencyWorker {
   id: number;
@@ -148,44 +149,12 @@ const EmergencyMap = () => {
       {/* Workers List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         {workers.map((worker) => (
-          <Card key={worker.id} className="p-4 hover:shadow-lg transition-shadow">
-            <div className="flex items-start gap-4">
-              <div className="bg-gray-100 p-3 rounded-full">
-                <User className="w-6 h-6 text-gray-600" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-lg">{worker.name}</h3>
-                <p className="text-sm text-gray-600">{worker.type}</p>
-                <div className="mt-2 flex items-center gap-4">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {worker.distance} km away
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <span className="mr-1">⭐</span>
-                    {worker.rating}
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    {worker.yearsOfExperience} years exp.
-                  </div>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <button 
-                  className="bg-green-100 p-2 rounded-full hover:bg-green-200 transition-colors"
-                  onClick={() => handleWorkerSelect(worker)}
-                >
-                  <Navigation className="w-5 h-5 text-green-600" />
-                </button>
-                <button 
-                  className="bg-blue-100 p-2 rounded-full hover:bg-blue-200 transition-colors"
-                  onClick={() => setShowChat(true)}
-                >
-                  <MessageCircle className="w-5 h-5 text-blue-600" />
-                </button>
-              </div>
-            </div>
-          </Card>
+          <EmergencyWorkerCard
+            key={worker.id}
+            worker={worker}
+            onNavigate={handleWorkerSelect}
+            onChat={() => setShowChat(true)}
+          />
         ))}
       </div>
 
@@ -208,7 +177,6 @@ const EmergencyMap = () => {
           </div>
           <div className="flex gap-4">
             <Button className="flex-1" onClick={() => setShowNavigation(false)}>
-              <Phone className="w-4 h-4 mr-2" />
               Voice Call
             </Button>
             <Button 
@@ -223,32 +191,11 @@ const EmergencyMap = () => {
       </Dialog>
 
       {/* Chat History Dialog */}
-      <Dialog open={showChat} onOpenChange={setShowChat}>
-        <DialogContent className="sm:max-w-[425px]">
-          <div className="space-y-4">
-            {chatHistory.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${
-                  message.sender === "You" ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`rounded-lg p-3 max-w-[80%] ${
-                    message.sender === "You"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-gray-100"
-                  }`}
-                >
-                  <p className="text-sm font-semibold">{message.sender}</p>
-                  <p>{message.message}</p>
-                  <p className="text-xs text-gray-500 mt-1">{message.timestamp}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ChatDialog
+        open={showChat}
+        onOpenChange={setShowChat}
+        messages={chatHistory}
+      />
 
       {/* Footer */}
       <footer className="mt-8 text-center text-gray-600 py-4 border-t">
