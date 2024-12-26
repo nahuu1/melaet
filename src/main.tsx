@@ -6,7 +6,6 @@ import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
-import { Profile } from "@/components/social/Profile";
 
 const router = createBrowserRouter([
   {
@@ -16,10 +15,6 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <Index />,
-  },
-  {
-    path: "/profile/:userId",
-    element: <Profile userId={window.location.pathname.split('/profile/')[1]} />,
   },
 ]);
 

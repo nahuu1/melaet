@@ -17,7 +17,7 @@ interface EmergencyServicesProps {
   };
 }
 
-export const EmergencyServices = ({ onEmergencyClick, translations }: EmergencyServicesProps) => {
+const EmergencyServices = ({ onEmergencyClick, translations }: EmergencyServicesProps) => {
   return (
     <div className="grid md:grid-cols-2 gap-8 mt-8">
       <div className="space-y-6">
@@ -69,3 +69,5 @@ export const EmergencyServices = ({ onEmergencyClick, translations }: EmergencyS
     </div>
   );
 };
+
+export default EmergencyServices;
