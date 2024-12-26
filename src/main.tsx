@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Landing from "./pages/Landing";
 import Index from "./pages/Index";
+import Profile from "./pages/Profile";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <Index />,
+  },
+  {
+    path: "/profile/:userId",
+    element: <Profile />,
   },
 ]);
 
