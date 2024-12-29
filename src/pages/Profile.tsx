@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import PostForm from "@/components/social/PostForm";
@@ -6,54 +5,27 @@ import PostsList from "@/components/social/PostsList";
 import { useAuth } from "@/contexts/AuthContext";
 import EditableProfile from "@/components/profile/EditableProfile";
 import UserProfile from "@/components/UserProfile";
+import { useProfileData } from "@/hooks/useProfileData";
 
 const Profile = () => {
   const { userId } = useParams();
   const { user } = useAuth();
-  const [profile, setProfile] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const { profileData, isLoading } = useProfileData(userId);
   const isOwnProfile = user?.uid === userId;
-  const [language, setLanguage] = useState<"english" | "amharic">("english");
-
-  useEffect(() => {
-    // Simulate profile fetch from local storage
-    const fetchProfile = () => {
-      const storedProfile = localStorage.getItem(`profile_${userId}`);
-      if (storedProfile) {
-        setProfile(JSON.parse(storedProfile));
-      } else {
-        // Default profile data
-        const defaultProfile = {
-          email: user?.email || "user@example.com",
-          bio: "",
-          skills: [],
-          workHistory: []
-        };
-        localStorage.setItem(`profile_${userId}`, JSON.stringify(defaultProfile));
-        setProfile(defaultProfile);
-      }
-      setLoading(false);
-    };
-
-    fetchProfile();
-  }, [userId, user?.email]);
+  const language = "english"; // Default to English for now
 
   const translations = {
     userStatus: language === "english" ? "Active" : "ንቁ",
   };
 
-  if (loading) {
+  if (isLoading) {
     return <div className="container mx-auto px-4 py-8">Loading...</div>;
-  }
-
-  if (!profile) {
-    return <div className="container mx-auto px-4 py-8">Profile not found</div>;
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
       <UserProfile 
-        email={profile.email} 
+        email={user?.email || ""}
         language={language}
         translations={translations}
       />
@@ -62,19 +34,19 @@ const Profile = () => {
         <EditableProfile />
       ) : (
         <Card className="p-6 mb-8">
-          <h1 className="text-2xl font-bold mb-4">{profile.email}</h1>
+          <h1 className="text-2xl font-bold mb-4">{profileData.displayName || "User Profile"}</h1>
           <div className="space-y-4">
-            {profile.bio && (
+            {profileData.bio && (
               <div>
                 <h2 className="text-xl font-semibold mb-2">About</h2>
-                <p>{profile.bio}</p>
+                <p>{profileData.bio}</p>
               </div>
             )}
-            {profile.skills && profile.skills.length > 0 && (
+            {profileData.skills && profileData.skills.length > 0 && (
               <div>
                 <h2 className="text-xl font-semibold mb-2">Skills</h2>
                 <div className="flex flex-wrap gap-2">
-                  {profile.skills.map((skill: string, index: number) => (
+                  {profileData.skills.map((skill: string, index: number) => (
                     <span key={index} className="bg-gray-100 px-3 py-1 rounded">
                       {skill}
                     </span>
@@ -82,11 +54,11 @@ const Profile = () => {
                 </div>
               </div>
             )}
-            {profile.workHistory && profile.workHistory.length > 0 && (
+            {profileData.workHistory && profileData.workHistory.length > 0 && (
               <div>
                 <h2 className="text-xl font-semibold mb-2">Work History</h2>
                 <div className="space-y-4">
-                  {profile.workHistory.map((work: any, index: number) => (
+                  {profileData.workHistory.map((work: any, index: number) => (
                     <div key={index} className="bg-gray-50 p-4 rounded">
                       <h3 className="font-semibold">{work.position}</h3>
                       <p className="text-gray-600">{work.company}</p>

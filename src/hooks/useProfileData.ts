@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import { toast } from '@/components/ui/use-toast';
 
 export interface ProfileData {
@@ -24,50 +22,24 @@ export const useProfileData = (userId: string | undefined) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true;
+    if (!userId) {
+      setIsLoading(false);
+      return;
+    }
 
-    const fetchProfile = async () => {
-      if (!userId) return;
-      
-      try {
-        const docRef = doc(db, 'users', userId);
-        const docSnap = await getDoc(docRef);
-        
-        if (docSnap.exists() && isMounted) {
-          const data = docSnap.data();
-          setProfileData({
-            displayName: data.displayName || '',
-            bio: data.bio || '',
-            skills: data.skills || [],
-            workHistory: data.workHistory || []
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-        if (isMounted) {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Failed to load profile data"
-          });
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    fetchProfile();
-    return () => { isMounted = false; };
+    const storedData = localStorage.getItem(`profile_${userId}`);
+    if (storedData) {
+      setProfileData(JSON.parse(storedData));
+    }
+    setIsLoading(false);
   }, [userId]);
 
   const saveProfile = async (data: ProfileData) => {
     if (!userId) return false;
 
     try {
-      const docRef = doc(db, 'users', userId);
-      await setDoc(docRef, data, { merge: true });
+      localStorage.setItem(`profile_${userId}`, JSON.stringify(data));
+      setProfileData(data);
       toast({
         title: "Success",
         description: "Profile updated successfully"
