@@ -34,8 +34,11 @@ const EditableProfile = () => {
     position: '',
     period: ''
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchProfile = async () => {
       if (!user?.uid) return;
       
@@ -43,20 +46,36 @@ const EditableProfile = () => {
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
         
-        if (docSnap.exists()) {
-          setProfileData(docSnap.data() as ProfileData);
+        if (docSnap.exists() && isMounted) {
+          const data = docSnap.data();
+          setProfileData({
+            displayName: data.displayName || '',
+            bio: data.bio || '',
+            skills: data.skills || [],
+            workHistory: data.workHistory || []
+          });
         }
       } catch (error) {
         console.error('Error fetching profile:', error);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to load profile data"
-        });
+        if (isMounted) {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Failed to load profile data"
+          });
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     fetchProfile();
+
+    return () => {
+      isMounted = false;
+    };
   }, [user]);
 
   const handleSave = async () => {
@@ -64,13 +83,14 @@ const EditableProfile = () => {
 
     try {
       const docRef = doc(db, 'users', user.uid);
-      // Using setDoc instead of updateDoc to ensure proper type handling
-      await setDoc(docRef, {
+      const dataToSave = {
         displayName: profileData.displayName,
         bio: profileData.bio,
         skills: profileData.skills,
         workHistory: profileData.workHistory
-      });
+      };
+      
+      await setDoc(docRef, dataToSave);
       setIsEditing(false);
       toast({
         title: "Success",
@@ -100,7 +120,7 @@ const EditableProfile = () => {
     if (newWorkHistory.company && newWorkHistory.position && newWorkHistory.period) {
       setProfileData(prev => ({
         ...prev,
-        workHistory: [...prev.workHistory, newWorkHistory]
+        workHistory: [...prev.workHistory, { ...newWorkHistory }]
       }));
       setNewWorkHistory({
         company: '',
@@ -109,6 +129,10 @@ const EditableProfile = () => {
       });
     }
   };
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-64">Loading...</div>;
+  }
 
   return (
     <Card className="p-6">
