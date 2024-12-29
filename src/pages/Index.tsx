@@ -8,56 +8,20 @@ import { MarketplaceSection } from "@/components/marketplace/MarketplaceSection"
 import UserProfile from "@/components/UserProfile";
 import EmergencyServices from "@/components/EmergencyServices";
 import { Card } from "@/components/ui/card";
+import { translations } from "@/translations";
 
-// Move translations to a separate file to reduce file size
-<lov-write file_path="src/translations/index.ts">
-export const translations = {
-  english: {
-    title: "Mella",
-    language: "አማርኛ",
-    emergencyServices: "Emergency Services",
-    ambulance: "Ambulance",
-    medicalEmergency: "Medical Emergency",
-    police: "Police",
-    securityEmergency: "Security Emergency",
-    fireBrigade: "Fire Brigade",
-    fireEmergency: "Fire Emergency",
-    trafficPolice: "Traffic Police",
-    trafficEmergency: "Traffic Emergency",
-    emergencyHotline: "Emergency Hotline",
-    callNow: "Call Now",
-    userStatus: "Active",
-    services: {
-      dogTraining: "Dog Training",
-      heartCare: "Heart Care Service",
-      homeRepair: "Home Repair",
-      security: "Security Service",
-      painting: "Painting",
-      otherServices: "Other Services"
-    }
-  },
-  amharic: {
-    title: "ኢትዮ አለርት",
-    language: "English",
-    emergencyServices: "የድንገተኛ አደጋ አገልግሎቶች",
-    ambulance: "አምቡላንስ",
-    medicalEmergency: "የሕክምና አደጋ",
-    police: "ፖሊስ",
-    securityEmergency: "የደህንነት አደጋ",
-    fireBrigade: "እሳት አደጋ መከላከያ",
-    fireEmergency: "የእሳት አደጋ",
-    trafficPolice: "የትራፊክ ፖሊስ",
-    trafficEmergency: "የትራፊክ አደጋ",
-    emergencyHotline: "የአደጋ ጊዜ የስልክ መስመር",
-    callNow: "አሁን ይደውሉ",
-    userStatus: "አክቲቭ",
-    services: {
-      dogTraining: "ውሻ ማሰልጠን",
-      heartCare: "የልብ እንክብካቤ አገልግሎት",
-      homeRepair: "የቤት ጥገና",
-      security: "የጥበቃ አገልግሎት",
-      painting: "ቀለም",
-      otherServices: "ተጨማሪ ስራዎች"
-    }
-  }
+const Index = () => {
+  const [language, setLanguage] = useState<"english" | "amharic">("english");
+  const t = translations[language];
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex flex-col space-y-8">
+        <EmergencyServices />
+        <MarketplaceSection />
+      </div>
+    </div>
+  );
 };
+
+export default Index;
