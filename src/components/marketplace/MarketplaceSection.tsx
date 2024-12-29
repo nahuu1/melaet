@@ -85,7 +85,9 @@ export const MarketplaceSection = () => {
   return (
     <div className="space-y-12 mt-8">
       <div className="bg-gradient-to-r from-red-50 to-yellow-50 p-4 md:p-8 rounded-lg">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">Find Skilled Ethiopian Service Providers</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
+          Find Skilled Ethiopian Service Providers
+        </h2>
         <div className="max-w-2xl mx-auto relative">
           <Input 
             placeholder="Search for services or taskers..." 
