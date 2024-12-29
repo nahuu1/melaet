@@ -14,10 +14,20 @@ const Index = () => {
   const [language, setLanguage] = useState<"english" | "amharic">("english");
   const t = translations[language];
 
+  const handleEmergencyClick = (service: string) => {
+    toast({
+      title: "Emergency Service Selected",
+      description: `You selected ${service} service. Help is on the way.`,
+    });
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col space-y-8">
-        <EmergencyServices />
+        <EmergencyServices 
+          onEmergencyClick={handleEmergencyClick}
+          translations={t}
+        />
         <MarketplaceSection />
       </div>
     </div>
