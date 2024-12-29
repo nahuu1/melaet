@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -64,7 +64,13 @@ const EditableProfile = () => {
 
     try {
       const docRef = doc(db, 'users', user.uid);
-      await updateDoc(docRef, profileData);
+      // Using setDoc instead of updateDoc to ensure proper type handling
+      await setDoc(docRef, {
+        displayName: profileData.displayName,
+        bio: profileData.bio,
+        skills: profileData.skills,
+        workHistory: profileData.workHistory
+      });
       setIsEditing(false);
       toast({
         title: "Success",
