@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { Card } from "@/components/ui/card";
 import PostForm from "@/components/social/PostForm";
 import PostsList from "@/components/social/PostsList";
@@ -18,25 +16,27 @@ const Profile = () => {
   const [language, setLanguage] = useState<"english" | "amharic">("english");
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      if (!userId) return;
-      
-      try {
-        const docRef = doc(db, "users", userId);
-        const docSnap = await getDoc(docRef);
-        
-        if (docSnap.exists()) {
-          setProfile(docSnap.data());
-        }
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      } finally {
-        setLoading(false);
+    // Simulate profile fetch from local storage
+    const fetchProfile = () => {
+      const storedProfile = localStorage.getItem(`profile_${userId}`);
+      if (storedProfile) {
+        setProfile(JSON.parse(storedProfile));
+      } else {
+        // Default profile data
+        const defaultProfile = {
+          email: user?.email || "user@example.com",
+          bio: "",
+          skills: [],
+          workHistory: []
+        };
+        localStorage.setItem(`profile_${userId}`, JSON.stringify(defaultProfile));
+        setProfile(defaultProfile);
       }
+      setLoading(false);
     };
 
     fetchProfile();
-  }, [userId]);
+  }, [userId, user?.email]);
 
   const translations = {
     userStatus: language === "english" ? "Active" : "ንቁ",

@@ -1,7 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { db } from "@/lib/firebase";
-import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 
 interface ChatMessage {
   id: number;
@@ -17,49 +15,23 @@ interface Props {
 }
 
 const ChatDialog = ({ open, onOpenChange, messages }: Props) => {
-  const unsubscribeRef = useRef<(() => void) | null>(null);
+  const [localMessages, setLocalMessages] = useState<ChatMessage[]>(messages);
 
   useEffect(() => {
-    if (!open) {
-      // Cleanup subscription when dialog closes
-      if (unsubscribeRef.current) {
-        unsubscribeRef.current();
-        unsubscribeRef.current = null;
+    // Load messages from localStorage when dialog opens
+    if (open) {
+      const storedMessages = localStorage.getItem('chat_messages');
+      if (storedMessages) {
+        setLocalMessages(JSON.parse(storedMessages));
       }
-      return;
     }
-
-    // Set up messages listener
-    const messagesQuery = query(
-      collection(db, "messages"),
-      orderBy("timestamp", "desc")
-    );
-
-    const unsubscribe = onSnapshot(messagesQuery, 
-      (snapshot) => {
-        // Handle updates
-      },
-      (error) => {
-        console.error("Error listening to messages:", error);
-      }
-    );
-
-    unsubscribeRef.current = unsubscribe;
-
-    // Cleanup on unmount or when dialog closes
-    return () => {
-      if (unsubscribeRef.current) {
-        unsubscribeRef.current();
-        unsubscribeRef.current = null;
-      }
-    };
   }, [open]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <div className="space-y-4">
-          {messages.map((message) => (
+          {localMessages.map((message) => (
             <div
               key={message.id}
               className={`flex ${

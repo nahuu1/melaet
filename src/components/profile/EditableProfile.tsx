@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,17 +6,45 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import ProfileSkills from './ProfileSkills';
 import ProfileWorkHistory from './ProfileWorkHistory';
-import { useProfileData } from '@/hooks/useProfileData';
+import { toast } from '@/components/ui/use-toast';
 
 const EditableProfile = () => {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const { profileData, setProfileData, isLoading, saveProfile } = useProfileData(user?.uid);
+  const [isLoading, setIsLoading] = useState(true);
+  const [profileData, setProfileData] = useState({
+    displayName: '',
+    bio: '',
+    skills: [] as string[],
+    workHistory: [] as { company: string; position: string; period: string }[]
+  });
+
+  useEffect(() => {
+    if (user?.uid) {
+      const storedProfile = localStorage.getItem(`profile_${user.uid}`);
+      if (storedProfile) {
+        setProfileData(JSON.parse(storedProfile));
+      }
+      setIsLoading(false);
+    }
+  }, [user?.uid]);
 
   const handleSave = async () => {
-    const success = await saveProfile(profileData);
-    if (success) {
-      setIsEditing(false);
+    try {
+      if (user?.uid) {
+        localStorage.setItem(`profile_${user.uid}`, JSON.stringify(profileData));
+        setIsEditing(false);
+        toast({
+          title: "Success",
+          description: "Profile updated successfully",
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update profile",
+      });
     }
   };
 
