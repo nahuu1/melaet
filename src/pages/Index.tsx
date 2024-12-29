@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Phone, LogOut, Home, Car, Mail, User, Search } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import EmergencyForm from "@/components/EmergencyForm";
 import { MarketplaceSection } from "@/components/marketplace/MarketplaceSection";
 import UserProfile from "@/components/UserProfile";
@@ -26,6 +26,14 @@ const translations = {
     emergencyHotline: "Emergency Hotline",
     callNow: "Call Now",
     userStatus: "Active",
+    services: {
+      dogTraining: "Dog Training",
+      heartCare: "Heart Care Service",
+      homeRepair: "Home Repair",
+      security: "Security Service",
+      painting: "Painting",
+      otherServices: "Other Services"
+    }
   },
   amharic: {
     title: "ኢትዮ አለርት",
@@ -42,8 +50,23 @@ const translations = {
     emergencyHotline: "የአደጋ ጊዜ የስልክ መስመር",
     callNow: "አሁን ይደውሉ",
     userStatus: "አክቲቭ",
+    services: {
+      dogTraining: "ውሻ ማሰልጠን",
+      heartCare: "የልብ እንክብካቤ አገልግሎት",
+      homeRepair: "የቤት ጥገና",
+      security: "የጥበቃ አገልግሎት",
+      painting: "ቀለም",
+      otherServices: "ተጨማሪ ስራዎች"
+    }
   }
 };
+
+const ServiceCard = ({ icon, title }: { icon: string; title: string }) => (
+  <Card className="p-6 text-center hover:shadow-md transition-shadow cursor-pointer">
+    <div className="text-4xl mb-4">{icon}</div>
+    <h3 className="font-semibold">{title}</h3>
+  </Card>
+);
 
 const Index = () => {
   const [showEmergencyForm, setShowEmergencyForm] = useState(false);
@@ -91,10 +114,18 @@ const Index = () => {
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold font-['Nyala']">{t.title}</h1>
           <div className="flex items-center gap-4">
-            <Home className="w-5 h-5" />
-            <Car className="w-5 h-5" />
-            <Mail className="w-5 h-5" />
-            <User className="w-5 h-5" />
+            <Link to="/home" className="hover:text-gray-200">
+              <Home className="w-5 h-5" />
+            </Link>
+            <Link to="/services" className="hover:text-gray-200">
+              <Car className="w-5 h-5" />
+            </Link>
+            <Link to="/messages" className="hover:text-gray-200">
+              <Mail className="w-5 h-5" />
+            </Link>
+            <Link to={`/profile/${user?.uid}`} className="hover:text-gray-200">
+              <User className="w-5 h-5" />
+            </Link>
             <Button 
               variant="outline" 
               className="bg-[#2EA043] text-white border-none hover:bg-[#2EA043]/90"
@@ -107,8 +138,8 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        {/* User Profile Section */}
         <div className="flex items-start gap-8">
+          {/* Left Sidebar */}
           <div className="w-1/4">
             <Card className="p-6 bg-white shadow-sm">
               <div className="flex flex-col items-center gap-4">
@@ -133,34 +164,34 @@ const Index = () => {
                   onClick={() => handleEmergencyClick("ambulance")}
                 >
                   <Phone className="w-4 h-4" />
-                  Ambulance
+                  {t.ambulance}
                 </Button>
                 <Button 
                   className="w-full bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2"
                   onClick={() => handleEmergencyClick("police")}
                 >
                   <Phone className="w-4 h-4" />
-                  Police
+                  {t.police}
                 </Button>
                 <Button 
                   className="w-full bg-orange-500 hover:bg-orange-600 text-white flex items-center gap-2"
                   onClick={() => handleEmergencyClick("fire")}
                 >
                   <Phone className="w-4 h-4" />
-                  Fire Brigade
+                  {t.fireBrigade}
                 </Button>
                 <Button 
                   className="w-full bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-2"
                   onClick={() => handleEmergencyClick("traffic")}
                 >
                   <Phone className="w-4 h-4" />
-                  Traffic Police
+                  {t.trafficPolice}
                 </Button>
                 <Button 
                   className="w-full bg-purple-500 hover:bg-purple-600 text-white flex items-center gap-2"
                 >
                   <Phone className="w-4 h-4" />
-                  Other Services
+                  {t.emergencyHotline}
                 </Button>
               </div>
             </Card>
@@ -168,7 +199,6 @@ const Index = () => {
 
           {/* Main Content Area */}
           <div className="flex-1">
-            {/* Search Bar */}
             <div className="relative mb-8">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
@@ -180,12 +210,12 @@ const Index = () => {
 
             {/* Service Categories */}
             <div className="grid grid-cols-3 gap-6 mb-8">
-              <ServiceCard icon="🐕" title="ውሻ ማሰልጠን" />
-              <ServiceCard icon="❤️" title="የልብ እንክብካቤ አገልግሎት" />
-              <ServiceCard icon="🔨" title="የቤት ጥገና" />
-              <ServiceCard icon="🛡️" title="የጥበቃ አገልግሎት" />
-              <ServiceCard icon="🎨" title="ቀለም" />
-              <ServiceCard icon="⚙️" title="ተጨማሪ ስራዎች" />
+              <ServiceCard icon="🐕" title={t.services.dogTraining} />
+              <ServiceCard icon="❤️" title={t.services.heartCare} />
+              <ServiceCard icon="🔨" title={t.services.homeRepair} />
+              <ServiceCard icon="🛡️" title={t.services.security} />
+              <ServiceCard icon="🎨" title={t.services.painting} />
+              <ServiceCard icon="⚙️" title={t.services.otherServices} />
             </div>
 
             {/* Emergency Map */}
@@ -198,7 +228,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Emergency Form Dialog */}
         {showEmergencyForm && (
           <EmergencyForm
             service={selectedService}
@@ -207,20 +236,11 @@ const Index = () => {
         )}
       </main>
 
-      {/* Footer */}
       <footer className="bg-[#1B8B34] text-white py-4 text-center">
         <p>Made by Tech Space ET</p>
       </footer>
     </div>
   );
 };
-
-// Service Card Component
-const ServiceCard = ({ icon, title }: { icon: string; title: string }) => (
-  <Card className="p-6 text-center hover:shadow-md transition-shadow cursor-pointer">
-    <div className="text-4xl mb-4">{icon}</div>
-    <h3 className="font-semibold">{title}</h3>
-  </Card>
-);
 
 export default Index;
