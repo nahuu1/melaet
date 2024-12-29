@@ -4,6 +4,7 @@ import PostForm from "@/components/social/PostForm";
 import PostsList from "@/components/social/PostsList";
 import EditableProfile from "@/components/profile/EditableProfile";
 import UserProfile from "@/components/UserProfile";
+import MessagesList from "@/components/chat/MessagesList";
 
 const Profile = () => {
   const { userId } = useParams();
@@ -24,6 +25,11 @@ const Profile = () => {
         language={language}
         translations={translations}
       />
+
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">Messages</h2>
+        <MessagesList />
+      </div>
 
       <EditableProfile />
 
