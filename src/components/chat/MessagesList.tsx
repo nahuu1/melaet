@@ -3,7 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar } from "@/components/ui/avatar";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface Message {
   id: string;
@@ -18,12 +19,45 @@ interface User {
   name: string;
   avatar: string;
   lastSeen: string;
+  initialMessage?: string;
 }
 
 const dummyUsers: User[] = [
-  { id: "1", name: "John Doe", avatar: "/placeholder.svg", lastSeen: "2 min ago" },
-  { id: "2", name: "Jane Smith", avatar: "/placeholder.svg", lastSeen: "5 min ago" },
-  { id: "3", name: "Mike Johnson", avatar: "/placeholder.svg", lastSeen: "1 hour ago" },
+  { 
+    id: "1", 
+    name: "Abebe Kebede", 
+    avatar: "/placeholder.svg", 
+    lastSeen: "2 min ago",
+    initialMessage: "ሰላም! እንደምን አለህ/ሽ?"
+  },
+  { 
+    id: "2", 
+    name: "Tigist Haile", 
+    avatar: "/placeholder.svg", 
+    lastSeen: "5 min ago",
+    initialMessage: "የቡና ሥነ-ሥርዓት አገልግሎት እፈልጋለሁ"
+  },
+  { 
+    id: "3", 
+    name: "Dawit Mengistu", 
+    avatar: "/placeholder.svg", 
+    lastSeen: "1 hour ago",
+    initialMessage: "መኪናዬን ለማሰር አገልግሎት እፈልጋለሁ"
+  },
+  { 
+    id: "4", 
+    name: "Hirut Assefa", 
+    avatar: "/placeholder.svg", 
+    lastSeen: "3 hours ago",
+    initialMessage: "ለሰርግ ፎቶግራፍ አገልግሎት እፈልጋለሁ"
+  },
+  { 
+    id: "5", 
+    name: "Yohannes Tadesse", 
+    avatar: "/placeholder.svg", 
+    lastSeen: "1 day ago",
+    initialMessage: "እባክዎ የቤት ጽዳት አገልግሎትዎን ይንገሩኝ"
+  }
 ];
 
 const MessagesList = () => {
@@ -31,11 +65,25 @@ const MessagesList = () => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>(() => {
     const stored = localStorage.getItem("chat_messages");
-    return stored ? JSON.parse(stored) : [];
+    const initialMessages = stored ? JSON.parse(stored) : [];
+    
+    // Add initial messages for each user if none exist
+    if (initialMessages.length === 0) {
+      return dummyUsers.filter(user => user.initialMessage).map(user => ({
+        id: `initial-${user.id}`,
+        senderId: user.id,
+        receiverId: "current-user",
+        content: user.initialMessage || "",
+        timestamp: new Date(Date.now() - Math.random() * 1000000).toISOString()
+      }));
+    }
+    
+    return initialMessages;
   });
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const currentUserId = "current-user"; // Simulating current user
+  const currentUserId = "current-user";
 
   const handleSendMessage = () => {
     if (!selectedUser || !newMessage.trim()) return;
@@ -65,13 +113,13 @@ const MessagesList = () => {
       (msg) =>
         (msg.senderId === currentUserId && msg.receiverId === selectedUser.id) ||
         (msg.senderId === selectedUser.id && msg.receiverId === currentUserId)
-    );
+    ).sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
   };
 
   return (
-    <div className="flex h-[80vh] gap-4">
+    <div className="flex flex-col md:flex-row h-[80vh] gap-4">
       {/* Users list */}
-      <div className="w-1/3 border rounded-lg">
+      <div className="w-full md:w-1/3 border rounded-lg">
         <ScrollArea className="h-full">
           {dummyUsers.map((user) => (
             <div
