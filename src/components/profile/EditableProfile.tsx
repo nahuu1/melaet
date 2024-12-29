@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,7 +8,6 @@ import ProfileWorkHistory from './ProfileWorkHistory';
 import { toast } from '@/components/ui/use-toast';
 
 const EditableProfile = () => {
-  const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [profileData, setProfileData] = useState({
@@ -20,25 +18,21 @@ const EditableProfile = () => {
   });
 
   useEffect(() => {
-    if (user?.uid) {
-      const storedProfile = localStorage.getItem(`profile_${user.uid}`);
-      if (storedProfile) {
-        setProfileData(JSON.parse(storedProfile));
-      }
-      setIsLoading(false);
+    const storedProfile = localStorage.getItem('user_profile');
+    if (storedProfile) {
+      setProfileData(JSON.parse(storedProfile));
     }
-  }, [user?.uid]);
+    setIsLoading(false);
+  }, []);
 
-  const handleSave = async () => {
+  const handleSave = () => {
     try {
-      if (user?.uid) {
-        localStorage.setItem(`profile_${user.uid}`, JSON.stringify(profileData));
-        setIsEditing(false);
-        toast({
-          title: "Success",
-          description: "Profile updated successfully",
-        });
-      }
+      localStorage.setItem('user_profile', JSON.stringify(profileData));
+      setIsEditing(false);
+      toast({
+        title: "Success",
+        description: "Profile updated successfully",
+      });
     } catch (error) {
       toast({
         variant: "destructive",
