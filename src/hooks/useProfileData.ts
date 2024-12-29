@@ -63,7 +63,7 @@ export const useProfileData = (userId: string | undefined) => {
   }, [userId]);
 
   const saveProfile = async (data: ProfileData) => {
-    if (!userId) return;
+    if (!userId) return false;
 
     try {
       const docRef = doc(db, 'users', userId);
