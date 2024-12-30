@@ -5,19 +5,6 @@ interface ServiceCardProps {
   id: string;
   name: string;
   provider: string;
-  type: string;Let me help you fix this TypeScript error. The error occurs because we're not properly handling the types in the ServiceCard component.
-
-<lov-code>
-Let's update the ServiceCard component to fix the type error:
-
-<lov-write file_path="src/components/services/ServiceCard.tsx">
-import { Card } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-interface ServiceCardProps {
-  id: string;
-  name: string;
-  provider: string;
   type: string;
   description: string;
   price: number;
