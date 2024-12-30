@@ -1,26 +1,10 @@
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Phone, MessageSquare, ArrowLeft } from "lucide-react";
-import { useNavigate, Link } from "react-router-dom";
-import { toast } from "@/components/ui/use-toast";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import { ServiceCard } from "@/components/services/ServiceCard";
+import { ServiceDialog } from "@/components/services/ServiceDialog";
 
-interface Service {
-  id: string;
-  name: string;
-  provider: string;
-  type: string;
-  description: string;
-  price: number;
-  distance: number;
-  rating: number;
-  image: string;
-  location: string;
-}
-
-const services: Service[] = [
+const services = [
   {
     id: "1",
     name: "Traditional Coffee Ceremony",
@@ -120,16 +104,7 @@ const services: Service[] = [
 ];
 
 const Services = () => {
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const navigate = useNavigate();
-
-  const handleMessageProvider = (service: Service) => {
-    navigate("/messages");
-    toast({
-      title: "Chat initiated",
-      description: `You can now chat with ${service.provider}`,
-    });
-  };
+  const [selectedService, setSelectedService] = useState(null);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -144,79 +119,18 @@ const Services = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {services.map((service) => (
-          <Card
+          <ServiceCard
             key={service.id}
-            className="p-4 cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => setSelectedService(service)}
-          >
-            <div className="flex items-start gap-4">
-              <Avatar className="w-16 h-16">
-                <AvatarImage src={service.image} />
-                <AvatarFallback>{service.provider[0]}</AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <h3 className="font-semibold text-lg">{service.name}</h3>
-                <p className="text-sm text-gray-600">{service.provider}</p>
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="text-sm text-gray-600">{service.distance} km away</span>
-                  <span className="text-sm text-gray-600">⭐ {service.rating}</span>
-                </div>
-                <p className="text-sm font-semibold mt-2">${service.price}</p>
-              </div>
-            </div>
-          </Card>
+            {...service}
+            onServiceClick={setSelectedService}
+          />
         ))}
       </div>
 
-      {selectedService && (
-        <Dialog open={!!selectedService} onOpenChange={() => setSelectedService(null)}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>{selectedService.name}</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <Avatar className="w-16 h-16">
-                  <AvatarImage src={selectedService.image} />
-                  <AvatarFallback>{selectedService.provider[0]}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="font-semibold">{selectedService.provider}</h3>
-                  <p className="text-sm text-gray-600">{selectedService.type}</p>
-                </div>
-              </div>
-              <p className="text-gray-600">{selectedService.description}</p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">{selectedService.location}</span>
-                <span className="text-sm text-gray-600">{selectedService.distance} km away</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Rating: ⭐ {selectedService.rating}</span>
-                <span className="font-semibold">${selectedService.price}</span>
-              </div>
-              <div className="flex gap-4 mt-4">
-                <Button className="flex-1" onClick={() => {
-                  toast({
-                    title: "Call initiated",
-                    description: `Calling ${selectedService.provider}...`,
-                  });
-                }}>
-                  <Phone className="w-4 h-4 mr-2" />
-                  Call
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="flex-1"
-                  onClick={() => handleMessageProvider(selectedService)}
-                >
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Message
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
+      <ServiceDialog
+        service={selectedService}
+        onClose={() => setSelectedService(null)}
+      />
     </div>
   );
 };
