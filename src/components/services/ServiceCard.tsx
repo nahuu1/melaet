@@ -50,7 +50,7 @@ export const ServiceCard = ({
             <span className="text-sm text-gray-600">{distance} km away</span>
             <span className="text-sm text-gray-600">⭐ {rating}</span>
           </div>
-          <p className="text-sm font-semibold mt-2">${price}</p>
+          <p className="text-sm font-semibold mt-2">{price} Birr</p>
         </div>
       </div>
     </Card>

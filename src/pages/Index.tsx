@@ -9,6 +9,7 @@ import { MarketplaceSection } from "@/components/marketplace/MarketplaceSection"
 import UserProfile from "@/components/UserProfile";
 import EmergencyServices from "@/components/EmergencyServices";
 import { Card } from "@/components/ui/card";
+import { NearbyServices } from "@/components/home/NearbyServices";
 
 const translations = {
   english: {
@@ -219,12 +220,15 @@ const Index = () => {
             </div>
 
             {/* Emergency Map */}
-            <div className="h-[400px] rounded-lg overflow-hidden shadow-lg">
+            <div className="h-[400px] rounded-lg overflow-hidden shadow-lg mb-8">
               <EmergencyServices
                 onEmergencyClick={handleEmergencyClick}
                 translations={t}
               />
             </div>
+
+            {/* Nearby Services Section */}
+            <NearbyServices />
           </div>
         </div>
 
