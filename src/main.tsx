@@ -5,6 +5,8 @@ import "./index.css";
 import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import Profile from "./pages/Profile";
+import Messages from "./pages/Messages";
+import Services from "./pages/Services";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -20,6 +22,14 @@ const router = createBrowserRouter([
   {
     path: "/profile/:userId",
     element: <Profile />,
+  },
+  {
+    path: "/messages",
+    element: <Messages />,
+  },
+  {
+    path: "/services",
+    element: <Services />,
   },
 ]);
 
