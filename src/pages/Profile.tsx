@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { Card } from "@/components/ui/card";
 import PostForm from "@/components/social/PostForm";
 import PostsList from "@/components/social/PostsList";
-import { useAuth } from "@/contexts/AuthContext";
 import EditableProfile from "@/components/profile/EditableProfile";
+import { mockUsers } from "@/data/mockData";
 
 interface UserProfile {
   email: string;
-  services?: string[];
-  jobHistory?: {
+  displayName: string;
+  bio: string;
+  skills: string[];
+  workHistory: {
     company: string;
     position: string;
     period: string;
@@ -20,30 +20,28 @@ interface UserProfile {
 
 const Profile = () => {
   const { userId } = useParams();
-  const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const isOwnProfile = user?.uid === userId;
+  
+  // Simulate current user - in a real app this would come from auth
+  const currentUserId = "current";
+  const isOwnProfile = userId === currentUserId;
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      if (!userId) return;
-      
-      try {
-        const docRef = doc(db, "users", userId);
-        const docSnap = await getDoc(docRef);
-        
-        if (docSnap.exists()) {
-          setProfile(docSnap.data() as UserProfile);
-        }
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // Simulate API call delay
+    const timer = setTimeout(() => {
+      const foundUser = mockUsers.find(user => user.id === userId) || mockUsers[0];
+      setProfile({
+        email: foundUser.email,
+        displayName: foundUser.displayName,
+        bio: foundUser.bio,
+        skills: foundUser.skills,
+        workHistory: foundUser.workHistory
+      });
+      setLoading(false);
+    }, 500);
 
-    fetchProfile();
+    return () => clearTimeout(timer);
   }, [userId]);
 
   if (loading) {
@@ -60,24 +58,28 @@ const Profile = () => {
         <EditableProfile />
       ) : (
         <Card className="p-6 mb-8">
-          <h1 className="text-2xl font-bold mb-4">{profile.email}</h1>
+          <h1 className="text-2xl font-bold mb-4">{profile.displayName}</h1>
+          <p className="text-gray-600 mb-4">{profile.email}</p>
+          <p className="mb-6">{profile.bio}</p>
           
-          {profile.services && profile.services.length > 0 && (
+          {profile.skills && profile.skills.length > 0 && (
             <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Services Offered</h2>
-              <ul className="list-disc pl-5">
-                {profile.services.map((service, index) => (
-                  <li key={index}>{service}</li>
+              <h2 className="text-xl font-semibold mb-2">Skills</h2>
+              <div className="flex flex-wrap gap-2">
+                {profile.skills.map((skill, index) => (
+                  <span key={index} className="bg-gray-100 px-3 py-1 rounded">
+                    {skill}
+                  </span>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
 
-          {profile.jobHistory && profile.jobHistory.length > 0 && (
+          {profile.workHistory && profile.workHistory.length > 0 && (
             <div>
-              <h2 className="text-xl font-semibold mb-2">Job History</h2>
+              <h2 className="text-xl font-semibold mb-2">Work History</h2>
               <div className="space-y-4">
-                {profile.jobHistory.map((job, index) => (
+                {profile.workHistory.map((job, index) => (
                   <div key={index} className="border-b pb-2">
                     <h3 className="font-semibold">{job.position}</h3>
                     <p className="text-gray-600">{job.company}</p>
@@ -90,14 +92,7 @@ const Profile = () => {
         </Card>
       )}
 
-      {user && user.uid === userId && (
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Create a Post</h2>
-          <PostForm />
-        </div>
-      )}
-
-      <div>
+      <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Posts</h2>
         <PostsList />
       </div>

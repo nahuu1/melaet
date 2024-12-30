@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { toast } from '@/components/ui/use-toast';
+import { mockUsers } from '@/data/mockData';
 
 interface ProfileData {
   displayName: string;
@@ -20,7 +18,6 @@ interface ProfileData {
 }
 
 const EditableProfile = () => {
-  const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState<ProfileData>({
     displayName: '',
@@ -36,42 +33,25 @@ const EditableProfile = () => {
   });
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      if (!user?.uid) return;
-      
-      try {
-        const docRef = doc(db, 'users', user.uid);
-        const docSnap = await getDoc(docRef);
-        
-        if (docSnap.exists()) {
-          setProfileData(docSnap.data() as ProfileData);
-        }
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to load profile data"
-        });
-      }
-    };
-
-    fetchProfile();
-  }, [user]);
+    // Simulate fetching profile data
+    const currentUser = mockUsers[0]; // Use first mock user as current user
+    setProfileData({
+      displayName: currentUser.displayName,
+      bio: currentUser.bio,
+      skills: currentUser.skills,
+      workHistory: currentUser.workHistory
+    });
+  }, []);
 
   const handleSave = async () => {
-    if (!user?.uid) return;
-
     try {
-      const docRef = doc(db, 'users', user.uid);
-      await updateDoc(docRef, profileData);
+      // Simulate saving to backend
       setIsEditing(false);
       toast({
         title: "Success",
         description: "Profile updated successfully"
       });
     } catch (error) {
-      console.error('Error updating profile:', error);
       toast({
         variant: "destructive",
         title: "Error",
