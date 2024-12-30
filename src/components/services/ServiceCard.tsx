@@ -1,8 +1,18 @@
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Phone, MessageSquare } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+
+interface ServiceCardProps {
+  id: string;
+  name: string;
+  provider: string;
+  type: string;Let me help you fix this TypeScript error. The error occurs because we're not properly handling the types in the ServiceCard component.
+
+<lov-code>
+Let's update the ServiceCard component to fix the type error:
+
+<lov-write file_path="src/components/services/ServiceCard.tsx">
+import { Card } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface ServiceCardProps {
   id: string;
@@ -15,7 +25,7 @@ interface ServiceCardProps {
   rating: number;
   image: string;
   location: string;
-  onServiceClick: (service: ServiceCardProps) => void;
+  onServiceClick: () => void;
 }
 
 export const ServiceCard = ({ 
@@ -28,15 +38,12 @@ export const ServiceCard = ({
   rating, 
   image, 
   location,
-  onServiceClick,
-  ...props
+  onServiceClick
 }: ServiceCardProps) => {
-  const navigate = useNavigate();
-
   return (
     <Card 
       className="p-4 cursor-pointer hover:shadow-lg transition-all"
-      onClick={() => onServiceClick({ name, provider, type, description, price, distance, rating, image, location, ...props })}
+      onClick={onServiceClick}
     >
       <div className="flex items-start gap-4">
         <Avatar className="w-16 h-16">
