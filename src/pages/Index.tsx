@@ -10,6 +10,7 @@ import UserProfile from "@/components/UserProfile";
 import EmergencyServices from "@/components/EmergencyServices";
 import { Card } from "@/components/ui/card";
 import { NearbyServices } from "@/components/home/NearbyServices";
+import { NearbyProducts } from "@/components/home/NearbyProducts";
 
 const translations = {
   english: {
@@ -27,6 +28,8 @@ const translations = {
     emergencyHotline: "Emergency Hotline",
     callNow: "Call Now",
     userStatus: "Active",
+    nearbyServices: "Nearby Services",
+    nearbyProducts: "Nearby Products",
     services: {
       dogTraining: "Dog Training",
       heartCare: "Heart Care Service",
@@ -37,7 +40,7 @@ const translations = {
     }
   },
   amharic: {
-    title: "ኢትዮ አለርት",
+    title: "መላ",
     language: "English",
     emergencyServices: "የድንገተኛ አደጋ አገልግሎቶች",
     ambulance: "አምቡላንስ",
@@ -51,6 +54,8 @@ const translations = {
     emergencyHotline: "የአደጋ ጊዜ የስልክ መስመር",
     callNow: "አሁን ይደውሉ",
     userStatus: "አክቲቭ",
+    nearbyServices: "አቅራቢያ አገልግሎቶች",
+    nearbyProducts: "አቅራቢያ ምርቶች",
     services: {
       dogTraining: "ውሻ ማሰልጠን",
       heartCare: "የልብ እንክብካቤ አገልግሎት",
@@ -61,13 +66,6 @@ const translations = {
     }
   }
 };
-
-const ServiceCard = ({ icon, title }: { icon: string; title: string }) => (
-  <Card className="p-6 text-center hover:shadow-md transition-shadow cursor-pointer">
-    <div className="text-4xl mb-4">{icon}</div>
-    <h3 className="font-semibold">{title}</h3>
-  </Card>
-);
 
 const Index = () => {
   const [showEmergencyForm, setShowEmergencyForm] = useState(false);
@@ -228,7 +226,16 @@ const Index = () => {
             </div>
 
             {/* Nearby Services Section */}
-            <NearbyServices />
+            <div className="mt-8">
+              <h2 className="text-2xl font-semibold mb-6">{t.nearbyServices}</h2>
+              <NearbyServices />
+            </div>
+
+            {/* Nearby Products Section */}
+            <div className="mt-8">
+              <h2 className="text-2xl font-semibold mb-6">{t.nearbyProducts}</h2>
+              <NearbyProducts />
+            </div>
           </div>
         </div>
 

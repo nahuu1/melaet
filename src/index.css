@@ -62,6 +62,23 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* Ethiopian-inspired fonts */
+  @font-face {
+    font-family: 'Nyala';
+    src: local('Nyala');
+  }
+
+  /* Amharic font */
+  @font-face {
+    font-family: 'Noto Sans Ethiopic';
+    src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap');
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Noto Sans Ethiopic', 'Nyala', system-ui, -apple-system, sans-serif;
+  }
 }
 
 @layer base {
@@ -72,10 +89,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-/* Ethiopian-inspired font for the app title */
-@font-face {
-  font-family: 'Nyala';
-  src: local('Nyala');
 }
