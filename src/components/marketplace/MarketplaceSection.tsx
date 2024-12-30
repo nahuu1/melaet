@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { TaskCard } from "./TaskCard";
 import { TaskerCard } from "./TaskerCard";
-import { NearbyServices } from "./NearbyServices";
 
 const featuredTasks = [
   {
@@ -84,10 +83,8 @@ const topTaskers = [
 export const MarketplaceSection = () => {
   return (
     <div className="space-y-12 mt-8">
-      <div className="bg-gradient-to-r from-red-50 to-yellow-50 p-4 md:p-8 rounded-lg">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-6">
-          Find Skilled Ethiopian Service Providers
-        </h2>
+      <div className="bg-gradient-to-r from-red-50 to-yellow-50 p-8 rounded-lg">
+        <h2 className="text-3xl font-bold text-center mb-6">Find Skilled Ethiopian Service Providers</h2>
         <div className="max-w-2xl mx-auto relative">
           <Input 
             placeholder="Search for services or taskers..." 
@@ -99,8 +96,6 @@ export const MarketplaceSection = () => {
           </Button>
         </div>
       </div>
-
-      <NearbyServices />
 
       <div>
         <h3 className="text-2xl font-semibold mb-4">Featured Tasks</h3>

@@ -2,7 +2,7 @@ import { User } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 interface UserProfileProps {
-  email: string;
+  email: string | null;
   language: "english" | "amharic";
   translations: {
     userStatus: string;

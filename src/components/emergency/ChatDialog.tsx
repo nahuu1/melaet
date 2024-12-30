@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface ChatMessage {
@@ -15,23 +14,11 @@ interface Props {
 }
 
 const ChatDialog = ({ open, onOpenChange, messages }: Props) => {
-  const [localMessages, setLocalMessages] = useState<ChatMessage[]>(messages);
-
-  useEffect(() => {
-    // Load messages from localStorage when dialog opens
-    if (open) {
-      const storedMessages = localStorage.getItem('chat_messages');
-      if (storedMessages) {
-        setLocalMessages(JSON.parse(storedMessages));
-      }
-    }
-  }, [open]);
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <div className="space-y-4">
-          {localMessages.map((message) => (
+          {messages.map((message) => (
             <div
               key={message.id}
               className={`flex ${
