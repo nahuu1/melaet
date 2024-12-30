@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { mockUsers, mockMessages } from "@/data/mockData";
 import { formatDistanceToNow } from "date-fns";
+import { Link } from "react-router-dom";
 
 interface Message {
   id: string;
@@ -52,6 +53,12 @@ const Messages = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-4">
+        <Link to="/" className="text-blue-500 hover:text-blue-700">
+          ← Back to Home
+        </Link>
+      </div>
+      
       <div className="grid grid-cols-12 gap-4 h-[calc(100vh-200px)]">
         {/* Users List */}
         <div className="col-span-4 bg-white rounded-lg shadow overflow-y-auto">
