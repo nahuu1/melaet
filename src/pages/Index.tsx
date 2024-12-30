@@ -11,6 +11,7 @@ import EmergencyServices from "@/components/EmergencyServices";
 import { Card } from "@/components/ui/card";
 import { NearbyServices } from "@/components/home/NearbyServices";
 import { NearbyProducts } from "@/components/home/NearbyProducts";
+import { ServiceCard } from "@/components/services/ServiceCard"; // Add this import
 
 const translations = {
   english: {
@@ -104,6 +105,15 @@ const Index = () => {
       title: language === "english" ? "ቋንቋ ተቀይሯል" : "Language Changed",
       description: language === "english" ? "ወደ አማርኛ ተቀይሯል" : "Changed to English",
     });
+  };
+
+  const ServiceCard = ({ icon, title }: { icon: string; title: string }) => {
+    return (
+      <Card className="p-6 text-center hover:shadow-lg transition-all cursor-pointer">
+        <div className="text-4xl mb-4">{icon}</div>
+        <h3 className="font-semibold">{title}</h3>
+      </Card>
+    );
   };
 
   return (

@@ -104,7 +104,7 @@ const services = [
 ];
 
 const Services = () => {
-  const [selectedService, setSelectedService] = useState(null);
+  const [selectedService, setSelectedService] = useState<typeof services[0] | null>(null);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -122,7 +122,7 @@ const Services = () => {
           <ServiceCard
             key={service.id}
             {...service}
-            onServiceClick={setSelectedService}
+            onServiceClick={() => setSelectedService(service)}
           />
         ))}
       </div>
