@@ -4,10 +4,14 @@ import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 import { Camera, Clock, MapPin, User, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import EmergencyMapView from "@/components/emergency/EmergencyMapView";
 
 const WorkerDashboard = () => {
   const [isOnline, setIsOnline] = useState(false);
   const navigate = useNavigate();
+
+  const workerLocation = { lat: -8.783195, lng: 34.508523 };
+  const emergencyLocation = { lat: -8.785195, lng: 34.510523 }; // Nearby location
 
   const previousWork = [
     { id: 1, type: "Medical Emergency", date: "2024-02-20", status: "Completed", payment: "$50" },
@@ -17,6 +21,18 @@ const WorkerDashboard = () => {
   const nearbyEmergencies = [
     { id: 1, type: "Medical", distance: "0.5km", status: "Urgent", address: "123 Main St" },
     { id: 2, type: "Police", distance: "1.2km", status: "Medium", address: "456 Oak Ave" },
+  ];
+
+  const workers = [
+    {
+      id: 1,
+      name: "Nahusenay Zewdu",
+      type: "Medical Emergency",
+      distance: 1.2,
+      location: workerLocation,
+      rating: 4.8,
+      yearsOfExperience: 8
+    }
   ];
 
   return (
@@ -50,7 +66,7 @@ const WorkerDashboard = () => {
               <User className="w-8 h-8 text-gray-500" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold">John Doe</h2>
+              <h2 className="text-xl font-semibold">Nahusenay Zewdu</h2>
               <p className="text-gray-600">ID: W123456</p>
               <p className="text-gray-600">Emergency Medical Technician</p>
             </div>
@@ -62,6 +78,17 @@ const WorkerDashboard = () => {
             <Camera className="w-4 h-4" />
             Scan ID
           </Button>
+        </Card>
+
+        {/* Map View */}
+        <Card className="p-6 mb-6">
+          <h3 className="text-lg font-semibold mb-4">Current Location</h3>
+          <div className="h-[400px] rounded-lg overflow-hidden">
+            <EmergencyMapView 
+              workers={workers}
+              userLocation={emergencyLocation}
+            />
+          </div>
         </Card>
 
         {/* Main Content Grid */}
