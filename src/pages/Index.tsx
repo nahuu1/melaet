@@ -11,7 +11,7 @@ import EmergencyServices from "@/components/EmergencyServices";
 import { Card } from "@/components/ui/card";
 import { NearbyServices } from "@/components/home/NearbyServices";
 import { NearbyProducts } from "@/components/home/NearbyProducts";
-import { ServiceCard } from "@/components/services/ServiceCard"; // Add this import
+import { ServiceCategoryCard } from "@/components/home/ServiceCategoryCard";
 
 const translations = {
   english: {
@@ -105,15 +105,6 @@ const Index = () => {
       title: language === "english" ? "ቋንቋ ተቀይሯል" : "Language Changed",
       description: language === "english" ? "ወደ አማርኛ ተቀይሯል" : "Changed to English",
     });
-  };
-
-  const ServiceCard = ({ icon, title }: { icon: string; title: string }) => {
-    return (
-      <Card className="p-6 text-center hover:shadow-lg transition-all cursor-pointer">
-        <div className="text-4xl mb-4">{icon}</div>
-        <h3 className="font-semibold">{title}</h3>
-      </Card>
-    );
   };
 
   return (
@@ -219,12 +210,12 @@ const Index = () => {
 
             {/* Service Categories */}
             <div className="grid grid-cols-3 gap-6 mb-8">
-              <ServiceCard icon="🐕" title={t.services.dogTraining} />
-              <ServiceCard icon="❤️" title={t.services.heartCare} />
-              <ServiceCard icon="🔨" title={t.services.homeRepair} />
-              <ServiceCard icon="🛡️" title={t.services.security} />
-              <ServiceCard icon="🎨" title={t.services.painting} />
-              <ServiceCard icon="⚙️" title={t.services.otherServices} />
+              <ServiceCategoryCard icon="🐕" title={t.services.dogTraining} />
+              <ServiceCategoryCard icon="❤️" title={t.services.heartCare} />
+              <ServiceCategoryCard icon="🔨" title={t.services.homeRepair} />
+              <ServiceCategoryCard icon="🛡️" title={t.services.security} />
+              <ServiceCategoryCard icon="🎨" title={t.services.painting} />
+              <ServiceCategoryCard icon="⚙️" title={t.services.otherServices} />
             </div>
 
             {/* Emergency Map */}
