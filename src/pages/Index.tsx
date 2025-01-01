@@ -110,10 +110,10 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Top Navigation Bar */}
-      <header className="bg-[#1B8B34] text-white py-3 px-4 shadow-md">
+      <header className="bg-[#1B8B34] text-white py-3 px-4 shadow-md sticky top-0 z-50">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold font-['Nyala']">{t.title}</h1>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Link to="/home" className="hover:text-gray-200">
               <Home className="w-5 h-5" />
             </Link>
@@ -128,7 +128,7 @@ const Index = () => {
             </Link>
             <Button 
               variant="outline" 
-              className="bg-[#2EA043] text-white border-none hover:bg-[#2EA043]/90"
+              className="bg-[#2EA043] text-white border-none hover:bg-[#2EA043]/90 text-sm px-2 sm:px-4"
               onClick={toggleLanguage}
             >
               {t.language}
@@ -137,13 +137,13 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="flex items-start gap-8">
+      <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
           {/* Left Sidebar */}
-          <div className="w-1/4">
-            <Card className="p-6 bg-white shadow-sm">
+          <div className="w-full lg:w-1/4">
+            <Card className="p-4 bg-white shadow-sm">
               <div className="flex flex-col items-center gap-4">
-                <div className="w-24 h-24 rounded-full overflow-hidden">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden">
                   <img 
                     src={user?.photoURL || '/placeholder.svg'} 
                     alt="Profile" 
@@ -151,47 +151,47 @@ const Index = () => {
                   />
                 </div>
                 <div className="text-center">
-                  <h2 className="font-semibold text-lg">{user?.displayName || user?.email}</h2>
-                  <p className="text-gray-600">0935344627</p>
+                  <h2 className="font-semibold text-base sm:text-lg">{user?.displayName || user?.email}</h2>
+                  <p className="text-gray-600 text-sm">0935344627</p>
                   <div className="w-3 h-3 bg-green-500 rounded-full mx-auto mt-2"></div>
                 </div>
               </div>
 
               {/* Emergency Service Buttons */}
-              <div className="mt-6 space-y-3">
+              <div className="mt-4 space-y-2">
                 <Button 
-                  className="w-full bg-red-500 hover:bg-red-600 text-white flex items-center gap-2"
+                  className="w-full bg-red-500 hover:bg-red-600 text-white flex items-center gap-2 text-sm sm:text-base py-2"
                   onClick={() => handleEmergencyClick("ambulance")}
                 >
-                  <Phone className="w-4 h-4" />
-                  {t.ambulance}
+                  <Phone className="w-4 h-4 flex-shrink-0" />
+                  <span className="truncate">{t.ambulance}</span>
                 </Button>
                 <Button 
-                  className="w-full bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2"
+                  className="w-full bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2 text-sm sm:text-base py-2"
                   onClick={() => handleEmergencyClick("police")}
                 >
-                  <Phone className="w-4 h-4" />
-                  {t.police}
+                  <Phone className="w-4 h-4 flex-shrink-0" />
+                  <span className="truncate">{t.police}</span>
                 </Button>
                 <Button 
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white flex items-center gap-2"
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white flex items-center gap-2 text-sm sm:text-base py-2"
                   onClick={() => handleEmergencyClick("fire")}
                 >
-                  <Phone className="w-4 h-4" />
-                  {t.fireBrigade}
+                  <Phone className="w-4 h-4 flex-shrink-0" />
+                  <span className="truncate">{t.fireBrigade}</span>
                 </Button>
                 <Button 
-                  className="w-full bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-2"
+                  className="w-full bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-2 text-sm sm:text-base py-2"
                   onClick={() => handleEmergencyClick("traffic")}
                 >
-                  <Phone className="w-4 h-4" />
-                  {t.trafficPolice}
+                  <Phone className="w-4 h-4 flex-shrink-0" />
+                  <span className="truncate">{t.trafficPolice}</span>
                 </Button>
                 <Button 
-                  className="w-full bg-purple-500 hover:bg-purple-600 text-white flex items-center gap-2"
+                  className="w-full bg-purple-500 hover:bg-purple-600 text-white flex items-center gap-2 text-sm sm:text-base py-2"
                 >
-                  <Phone className="w-4 h-4" />
-                  {t.emergencyHotline}
+                  <Phone className="w-4 h-4 flex-shrink-0" />
+                  <span className="truncate">{t.emergencyHotline}</span>
                 </Button>
               </div>
             </Card>
@@ -199,7 +199,7 @@ const Index = () => {
 
           {/* Main Content Area */}
           <div className="flex-1">
-            <div className="relative mb-8">
+            <div className="relative mb-6">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
@@ -209,7 +209,7 @@ const Index = () => {
             </div>
 
             {/* Service Categories */}
-            <div className="grid grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-6 mb-6 sm:mb-8">
               <ServiceCategoryCard icon="🐕" title={t.services.dogTraining} />
               <ServiceCategoryCard icon="❤️" title={t.services.heartCare} />
               <ServiceCategoryCard icon="🔨" title={t.services.homeRepair} />
@@ -219,7 +219,7 @@ const Index = () => {
             </div>
 
             {/* Emergency Map */}
-            <div className="h-[400px] rounded-lg overflow-hidden shadow-lg mb-8">
+            <div className="h-[300px] sm:h-[400px] rounded-lg overflow-hidden shadow-lg mb-6 sm:mb-8">
               <EmergencyServices
                 onEmergencyClick={handleEmergencyClick}
                 translations={t}
@@ -227,14 +227,14 @@ const Index = () => {
             </div>
 
             {/* Nearby Services Section */}
-            <div className="mt-8">
-              <h2 className="text-2xl font-semibold mb-6">{t.nearbyServices}</h2>
+            <div className="mt-6 sm:mt-8">
+              <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">{t.nearbyServices}</h2>
               <NearbyServices />
             </div>
 
             {/* Nearby Products Section */}
-            <div className="mt-8">
-              <h2 className="text-2xl font-semibold mb-6">{t.nearbyProducts}</h2>
+            <div className="mt-6 sm:mt-8">
+              <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">{t.nearbyProducts}</h2>
               <NearbyProducts />
             </div>
           </div>
@@ -248,7 +248,7 @@ const Index = () => {
         )}
       </main>
 
-      <footer className="bg-[#1B8B34] text-white py-4 text-center">
+      <footer className="bg-[#1B8B34] text-white py-4 text-center mt-8">
         <p>Made by Tech Space ET</p>
       </footer>
     </div>
