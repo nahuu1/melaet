@@ -1,51 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import EmergencyWorkerCard from "./emergency/EmergencyWorkerCard";
 import ChatDialog from "./emergency/ChatDialog";
-
-interface EmergencyWorker {
-  id: number;
-  name: string;
-  type: string;
-  distance: number;
-  location: { lat: number; lng: number };
-  rating: number;
-  yearsOfExperience: number;
-}
-
-interface ChatMessage {
-  id: number;
-  sender: string;
-  message: string;
-  timestamp: string;
-}
+import EmergencyMapView from "./emergency/EmergencyMapView";
+import WorkersList from "./emergency/WorkersList";
+import { EmergencyWorker, ChatMessage } from "@/types/emergency";
 
 const EmergencyMap = () => {
-  const [workers, setWorkers] = useState<EmergencyWorker[]>([]);
   const [selectedWorker, setSelectedWorker] = useState<EmergencyWorker | null>(null);
   const [showNavigation, setShowNavigation] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  
   const userLocation = { lat: -8.783195, lng: 34.508523 };
-  const [chatHistory] = useState<ChatMessage[]>([
-    { id: 1, sender: "Worker", message: "I'm on my way!", timestamp: "10:30 AM" },
-    { id: 2, sender: "You", message: "Please hurry!", timestamp: "10:31 AM" },
-    { id: 3, sender: "Worker", message: "ETA 5 minutes", timestamp: "10:32 AM" },
-  ]);
-
-  useEffect(() => {
-    // Simulate nearby emergency workers
-    const mockWorkers: EmergencyWorker[] = [
-      {
-        id: 1,
-        name: "Dr. Sarah Johnson",
-        type: "Ambulance",
-        distance: 1.2,
-        location: { lat: userLocation.lat + 0.01, lng: userLocation.lng + 0.01 },
-        rating: 4.8,
-        yearsOfExperience: 8
-      },
+  
+  // Mock emergency workers data
+  const workers: EmergencyWorker[] = [
+    {
+      id: 1,
+      name: "Dr. Sarah Johnson",
+      type: "Ambulance",
+      distance: 1.2,
+      location: { lat: userLocation.lat + 0.01, lng: userLocation.lng + 0.01 },
+      rating: 4.8,
+      yearsOfExperience: 8
+    },
       {
         id: 2,
         name: "Officer Michael Chen",
@@ -109,10 +88,13 @@ const EmergencyMap = () => {
         rating: 4.8,
         yearsOfExperience: 11
       }
-    ];
+  ];
 
-    setWorkers(mockWorkers);
-  }, []);
+  const chatHistory: ChatMessage[] = [
+    { id: 1, sender: "Worker", message: "I'm on my way!", timestamp: "10:30 AM" },
+    { id: 2, sender: "You", message: "Please hurry!", timestamp: "10:31 AM" },
+    { id: 3, sender: "Worker", message: "ETA 5 minutes", timestamp: "10:32 AM" },
+  ];
 
   const handleWorkerSelect = (worker: EmergencyWorker) => {
     setSelectedWorker(worker);
@@ -130,52 +112,24 @@ const EmergencyMap = () => {
         Back
       </Button>
 
-      {/* Map */}
-      <div className="w-full h-[400px] relative bg-gray-100 rounded-lg overflow-hidden">
-        <iframe
-          src={`https://www.openstreetmap.org/export/embed.html?bbox=${
-            userLocation.lng - 0.05
-          },${
-            userLocation.lat - 0.05
-          },${
-            userLocation.lng + 0.05
-          },${
-            userLocation.lat + 0.05
-          }&layer=mapnik&marker=${userLocation.lat},${userLocation.lng}`}
-          className="w-full h-full border-none"
-        />
-      </div>
+      {/* Map View */}
+      <EmergencyMapView workers={workers} userLocation={userLocation} />
 
       {/* Workers List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        {workers.map((worker) => (
-          <EmergencyWorkerCard
-            key={worker.id}
-            worker={worker}
-            onNavigate={handleWorkerSelect}
-            onChat={() => setShowChat(true)}
-          />
-        ))}
-      </div>
+      <WorkersList
+        workers={workers}
+        onNavigate={handleWorkerSelect}
+        onChat={() => setShowChat(true)}
+      />
 
       {/* Navigation Dialog */}
       <Dialog open={showNavigation} onOpenChange={setShowNavigation}>
         <DialogContent className="sm:max-w-[425px]">
-          <div className="h-[400px] relative bg-gray-100 rounded-lg overflow-hidden mb-4">
-            <iframe
-              src={`https://www.openstreetmap.org/export/embed.html?bbox=${
-                userLocation.lng - 0.02
-              },${
-                userLocation.lat - 0.02
-              },${
-                userLocation.lng + 0.02
-              },${
-                userLocation.lat + 0.02
-              }&layer=mapnik&marker=${userLocation.lat},${userLocation.lng}`}
-              className="w-full h-full border-none"
-            />
-          </div>
-          <div className="flex gap-4">
+          <EmergencyMapView 
+            workers={selectedWorker ? [selectedWorker] : []} 
+            userLocation={userLocation} 
+          />
+          <div className="flex gap-4 mt-4">
             <Button className="flex-1" onClick={() => setShowNavigation(false)}>
               Voice Call
             </Button>

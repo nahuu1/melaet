@@ -109,7 +109,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Top Navigation Bar */}
+      {/* Header */}
       <header className="bg-[#1B8B34] text-white py-3 px-4 shadow-md sticky top-0 z-50">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold font-['Nyala']">{t.title}</h1>
@@ -248,9 +248,34 @@ const Index = () => {
         )}
       </main>
 
-      <footer className="bg-[#1B8B34] text-white py-4 text-center mt-8">
-        <p>Made by Tech Space ET</p>
+      <footer className="bg-[#1B8B34] text-white py-4 mt-8">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>Made by Tech Space ET</p>
+            <div className="flex gap-4">
+              <Link 
+                to="/worker"
+                className="text-white hover:text-gray-200 transition-colors"
+              >
+                Worker Portal
+              </Link>
+              <Link 
+                to="/admin"
+                className="text-white hover:text-gray-200 transition-colors"
+              >
+                Admin Dashboard
+              </Link>
+            </div>
+          </div>
+        </div>
       </footer>
+
+      {showEmergencyForm && (
+        <EmergencyForm
+          service={selectedService}
+          onClose={() => setShowEmergencyForm(false)}
+        />
+      )}
     </div>
   );
 };

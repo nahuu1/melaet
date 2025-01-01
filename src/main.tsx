@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";
 import Services from "./pages/Services";
+import WorkerDashboard from "./pages/WorkerDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
   {
     path: "/services",
     element: <Services />,
+  },
+  {
+    path: "/worker",
+    element: <WorkerDashboard />,
+  },
+  {
+    path: "/admin",
+    element: <AdminDashboard />,
   },
 ]);
 
