@@ -64,7 +64,7 @@ export const ServiceDialog = ({ service, onClose }: ServiceDialogProps) => {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm text-gray-600">Rating: ⭐ {service.rating}</span>
-            <span className="font-semibold">${service.price}</span>
+            <span className="font-semibold">{service.price} Birr</span>
           </div>
           <div className="flex gap-4 mt-4">
             <Button className="flex-1" onClick={handleCallClick}>
