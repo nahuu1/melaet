@@ -251,7 +251,16 @@ const Index = () => {
       <footer className="bg-[#1B8B34] text-white py-4 mt-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p>Made by Tech Space ET</p>
+            <p>
+              <a 
+                href="http://techspace.rf.gd/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                Made by Tech Space ET
+              </a>
+            </p>
             <div className="flex gap-4">
               <Link 
                 to="/worker"

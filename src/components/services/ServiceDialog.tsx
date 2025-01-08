@@ -1,15 +1,12 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Phone, MessageSquare } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import { CheckoutDialog } from "@/components/checkout/CheckoutDialog";
 
 interface ServiceDialogProps {
   service: {
     name: string;
     provider: string;
-    type: string;
     description: string;
     price: number;
     distance: number;
@@ -21,63 +18,97 @@ interface ServiceDialogProps {
 }
 
 export const ServiceDialog = ({ service, onClose }: ServiceDialogProps) => {
-  const navigate = useNavigate();
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [language, setLanguage] = useState<"english" | "amharic">("english");
+
+  const translations = {
+    english: {
+      provider: "Provider",
+      distance: "Distance",
+      rating: "Rating",
+      location: "Location",
+      description: "Description",
+      price: "Price",
+      birr: "Birr",
+      buyNow: "Buy Now"
+    },
+    amharic: {
+      provider: "አቅራቢ",
+      distance: "ርቀት",
+      rating: "ደረጃ",
+      location: "አድራሻ",
+      description: "መግለጫ",
+      price: "ዋጋ",
+      birr: "ብር",
+      buyNow: "አሁን ይግዙ"
+    }
+  };
+
+  const t = translations[language];
 
   if (!service) return null;
 
-  const handleMessageClick = () => {
-    navigate("/messages");
-    toast({
-      title: "Chat initiated",
-      description: `You can now chat with ${service.provider}`,
-    });
-  };
-
-  const handleCallClick = () => {
-    toast({
-      title: "Calling service provider",
-      description: `Initiating call with ${service.provider}...`,
-    });
-  };
-
   return (
-    <Dialog open={!!service} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{service.name}</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <Avatar className="w-16 h-16">
-              <AvatarImage src={service.image} alt={service.provider} />
-              <AvatarFallback>{service.provider[0]}</AvatarFallback>
-            </Avatar>
+    <>
+      <Dialog open={Boolean(service)} onOpenChange={onClose}>
+        <DialogContent className="sm:max-w-[425px]">
+          <div className="flex justify-between items-start mb-4">
             <div>
-              <h3 className="font-semibold">{service.provider}</h3>
-              <p className="text-sm text-gray-600">{service.type}</p>
+              <h2 className="text-2xl font-bold">{service.name}</h2>
+              <p className="text-gray-600">{service.provider}</p>
             </div>
-          </div>
-          <p className="text-gray-600">{service.description}</p>
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-600">{service.location}</span>
-            <span className="text-sm text-gray-600">{service.distance} km away</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-600">Rating: ⭐ {service.rating}</span>
-            <span className="font-semibold">{service.price} Birr</span>
-          </div>
-          <div className="flex gap-4 mt-4">
-            <Button className="flex-1" onClick={handleCallClick}>
-              <Phone className="w-4 h-4 mr-2" />
-              Call
-            </Button>
-            <Button variant="outline" className="flex-1" onClick={handleMessageClick}>
-              <MessageSquare className="w-4 h-4 mr-2" />
-              Message
+            <Button
+              onClick={() => setLanguage(prev => prev === "english" ? "amharic" : "english")}
+              variant="outline"
+              size="sm"
+            >
+              {language === "english" ? "አማርኛ" : "English"}
             </Button>
           </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+
+          <div className="space-y-4">
+            <img
+              src={service.image}
+              alt={service.name}
+              className="w-full h-48 object-cover rounded-lg"
+            />
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm text-gray-600">{t.distance}</p>
+                <p className="font-semibold">{service.distance} km</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">{t.rating}</p>
+                <p className="font-semibold">⭐ {service.rating}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">{t.location}</p>
+                <p className="font-semibold">{service.location}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">{t.price}</p>
+                <p className="font-semibold">{service.price} {t.birr}</p>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm text-gray-600 mb-2">{t.description}</p>
+              <p>{service.description}</p>
+            </div>
+
+            <Button className="w-full" onClick={() => setShowCheckout(true)}>
+              {t.buyNow}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <CheckoutDialog
+        open={showCheckout}
+        onClose={() => setShowCheckout(false)}
+        product={service}
+      />
+    </>
   );
 };

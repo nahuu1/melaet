@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";
 import Services from "./pages/Services";
+import Orders from "./pages/Orders";
 import WorkerDashboard from "./pages/WorkerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/services",
     element: <Services />,
+  },
+  {
+    path: "/orders",
+    element: <Orders />,
   },
   {
     path: "/worker",
