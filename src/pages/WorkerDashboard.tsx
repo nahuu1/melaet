@@ -6,16 +6,62 @@ import { Camera, Clock, MapPin, User, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import EmergencyMapView from "@/components/emergency/EmergencyMapView";
 
+const translations = {
+  english: {
+    title: "Worker Dashboard",
+    status: {
+      online: "Online",
+      offline: "Offline"
+    },
+    backHome: "Back to Home",
+    workerInfo: {
+      id: "ID",
+      role: "Emergency Medical Technician",
+      scanId: "Scan ID"
+    },
+    location: "Current Location",
+    previousWork: "Previous Work",
+    nearbyEmergencies: "Nearby Emergencies",
+    actions: {
+      accept: "Accept",
+      ignore: "Ignore"
+    }
+  },
+  amharic: {
+    title: "የሰራተኛ ዳሽቦርድ",
+    status: {
+      online: "በመስመር ላይ",
+      offline: "ከመስመር ውጭ"
+    },
+    backHome: "ወደ መነሻ ተመለስ",
+    workerInfo: {
+      id: "መታወቂያ",
+      role: "የድንገተኛ ሕክምና ቴክኒሺያን",
+      scanId: "መታወቂያ ስካን"
+    },
+    location: "አሁን ያለዎት ቦታ",
+    previousWork: "ያለፉ ስራዎች",
+    nearbyEmergencies: "አቅራቢያ ያሉ ድንገተኛ ጊዜዎች",
+    actions: {
+      accept: "ተቀበል",
+      ignore: "አልቀበልም"
+    }
+  }
+};
+
 const WorkerDashboard = () => {
   const [isOnline, setIsOnline] = useState(false);
+  const [language, setLanguage] = useState<"english" | "amharic">("english");
   const navigate = useNavigate();
 
+  const t = translations[language];
+
   const workerLocation = { lat: -8.783195, lng: 34.508523 };
-  const emergencyLocation = { lat: -8.785195, lng: 34.510523 }; // Nearby location
+  const emergencyLocation = { lat: -8.785195, lng: 34.510523 };
 
   const previousWork = [
-    { id: 1, type: "Medical Emergency", date: "2024-02-20", status: "Completed", payment: "$50" },
-    { id: 2, type: "Fire Emergency", date: "2024-02-19", status: "Completed", payment: "$75" },
+    { id: 1, type: "Medical Emergency", date: "2024-02-20", status: "Completed", payment: "50 Birr" },
+    { id: 2, type: "Fire Emergency", date: "2024-02-19", status: "Completed", payment: "75 Birr" },
   ];
 
   const nearbyEmergencies = [
@@ -37,29 +83,34 @@ const WorkerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      {/* Header */}
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Worker Dashboard</h1>
+          <h1 className="text-2xl font-bold">{t.title}</h1>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <span>Offline</span>
+              <span>{t.status.offline}</span>
               <Switch
                 checked={isOnline}
                 onCheckedChange={setIsOnline}
               />
-              <span>Online</span>
+              <span>{t.status.online}</span>
             </div>
+            <Button 
+              variant="outline"
+              onClick={() => setLanguage(prev => prev === "english" ? "amharic" : "english")}
+              className="mr-2"
+            >
+              {language === "english" ? "አማርኛ" : "English"}
+            </Button>
             <Button 
               variant="outline"
               onClick={() => navigate("/")}
             >
-              Back to Home
+              {t.backHome}
             </Button>
           </div>
         </div>
 
-        {/* Worker Profile Card */}
         <Card className="p-6 mb-6">
           <div className="flex items-center gap-4 mb-4">
             <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
@@ -67,8 +118,8 @@ const WorkerDashboard = () => {
             </div>
             <div>
               <h2 className="text-xl font-semibold">Nahusenay Zewdu</h2>
-              <p className="text-gray-600">ID: W123456</p>
-              <p className="text-gray-600">Emergency Medical Technician</p>
+              <p className="text-gray-600">{t.workerInfo.id}: W123456</p>
+              <p className="text-gray-600">{t.workerInfo.role}</p>
             </div>
           </div>
           <Button 
@@ -76,13 +127,12 @@ const WorkerDashboard = () => {
             onClick={() => alert("Opening ID Scanner...")}
           >
             <Camera className="w-4 h-4" />
-            Scan ID
+            {t.workerInfo.scanId}
           </Button>
         </Card>
 
-        {/* Map View */}
         <Card className="p-6 mb-6">
-          <h3 className="text-lg font-semibold mb-4">Current Location</h3>
+          <h3 className="text-lg font-semibold mb-4">{t.location}</h3>
           <div className="h-[400px] rounded-lg overflow-hidden">
             <EmergencyMapView 
               workers={workers}
@@ -91,13 +141,11 @@ const WorkerDashboard = () => {
           </div>
         </Card>
 
-        {/* Main Content Grid */}
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Previous Work */}
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5" />
-              Previous Work
+              {t.previousWork}
             </h3>
             <div className="space-y-4">
               {previousWork.map((work) => (
@@ -117,11 +165,10 @@ const WorkerDashboard = () => {
             </div>
           </Card>
 
-          {/* Nearby Emergencies */}
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5" />
-              Nearby Emergencies
+              {t.nearbyEmergencies}
             </h3>
             <div className="space-y-4">
               {nearbyEmergencies.map((emergency) => (
@@ -133,8 +180,8 @@ const WorkerDashboard = () => {
                       <p className="text-sm text-gray-600">{emergency.distance} away</p>
                     </div>
                     <div className="space-y-2">
-                      <Button size="sm" className="w-full">Accept</Button>
-                      <Button size="sm" variant="outline" className="w-full">Ignore</Button>
+                      <Button size="sm" className="w-full">{t.actions.accept}</Button>
+                      <Button size="sm" variant="outline" className="w-full">{t.actions.ignore}</Button>
                     </div>
                   </div>
                 </div>

@@ -6,12 +6,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import EmergencyForm from "@/components/EmergencyForm";
 import { MarketplaceSection } from "@/components/marketplace/MarketplaceSection";
-import UserProfile from "@/components/UserProfile";
-import EmergencyServices from "@/components/EmergencyServices";
 import { Card } from "@/components/ui/card";
 import { NearbyServices } from "@/components/home/NearbyServices";
 import { NearbyProducts } from "@/components/home/NearbyProducts";
-import { ServiceCategoryCard } from "@/components/home/ServiceCategoryCard";
+import { ServiceCategories } from "@/components/home/ServiceCategories";
+import { EmergencyMapSection } from "@/components/home/EmergencyMapSection";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const translations = {
   english: {
@@ -74,6 +74,7 @@ const Index = () => {
   const [language, setLanguage] = useState<"english" | "amharic">("english");
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const t = translations[language];
 
@@ -209,22 +210,15 @@ const Index = () => {
             </div>
 
             {/* Service Categories */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-6 mb-6 sm:mb-8">
-              <ServiceCategoryCard icon="🐕" title={t.services.dogTraining} />
-              <ServiceCategoryCard icon="❤️" title={t.services.heartCare} />
-              <ServiceCategoryCard icon="🔨" title={t.services.homeRepair} />
-              <ServiceCategoryCard icon="🛡️" title={t.services.security} />
-              <ServiceCategoryCard icon="🎨" title={t.services.painting} />
-              <ServiceCategoryCard icon="⚙️" title={t.services.otherServices} />
-            </div>
+            <ServiceCategories translations={t} />
 
-            {/* Emergency Map */}
-            <div className="h-[300px] sm:h-[400px] rounded-lg overflow-hidden shadow-lg mb-6 sm:mb-8">
-              <EmergencyServices
+            {/* Emergency Map - Now responsive for mobile */}
+            {(!isMobile || (isMobile && showEmergencyForm)) && (
+              <EmergencyMapSection
                 onEmergencyClick={handleEmergencyClick}
                 translations={t}
               />
-            </div>
+            )}
 
             {/* Nearby Services Section */}
             <div className="mt-6 sm:mt-8">
@@ -251,7 +245,16 @@ const Index = () => {
       <footer className="bg-[#1B8B34] text-white py-4 mt-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p>Made by Tech Space ET</p>
+            <p>
+              <a 
+                href="http://techspace.rf.gd/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                Made by Tech Space ET
+              </a>
+            </p>
             <div className="flex gap-4">
               <Link 
                 to="/worker"
@@ -269,13 +272,6 @@ const Index = () => {
           </div>
         </div>
       </footer>
-
-      {showEmergencyForm && (
-        <EmergencyForm
-          service={selectedService}
-          onClose={() => setShowEmergencyForm(false)}
-        />
-      )}
     </div>
   );
 };
