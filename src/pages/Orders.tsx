@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 
 interface OrderItem {
   id: string;
@@ -14,6 +16,7 @@ interface OrderItem {
 
 const Orders = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [orders] = useState<OrderItem[]>([
     {
       id: "1",
@@ -36,7 +39,8 @@ const Orders = () => {
       pending: "Pending",
       processing: "Processing",
       delivered: "Delivered",
-      birr: "Birr"
+      birr: "Birr",
+      back: "Back"
     },
     amharic: {
       title: "ትዕዛዞቼ",
@@ -48,7 +52,8 @@ const Orders = () => {
       pending: "በመጠባበቅ ላይ",
       processing: "በሂደት ላይ",
       delivered: "ደርሷል",
-      birr: "ብር"
+      birr: "ብር",
+      back: "ተመለስ"
     }
   };
 
@@ -57,14 +62,24 @@ const Orders = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{t.title}</h1>
+      <div className="flex items-center gap-4 mb-6">
         <Button
-          onClick={() => setLanguage(prev => prev === "english" ? "amharic" : "english")}
-          variant="outline"
+          variant="ghost"
+          size="icon"
+          onClick={() => navigate("/home")}
+          className="hover:bg-gray-100"
         >
-          {language === "english" ? "አማርኛ" : "English"}
+          <ChevronLeft className="h-5 w-5" />
         </Button>
+        <h1 className="text-2xl font-bold">{t.title}</h1>
+        <div className="ml-auto">
+          <Button
+            onClick={() => setLanguage(prev => prev === "english" ? "amharic" : "english")}
+            variant="outline"
+          >
+            {language === "english" ? "አማርኛ" : "English"}
+          </Button>
+        </div>
       </div>
 
       {orders.length === 0 ? (
