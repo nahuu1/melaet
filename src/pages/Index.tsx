@@ -12,6 +12,8 @@ import { NearbyProducts } from "@/components/home/NearbyProducts";
 import { ServiceCategories } from "@/components/home/ServiceCategories";
 import { EmergencyMapSection } from "@/components/home/EmergencyMapSection";
 import { useIsMobile } from "@/hooks/use-mobile";
+import PostForm from "@/components/social/PostForm";
+import PostsList from "@/components/social/PostsList";
 
 const translations = {
   english: {
@@ -207,6 +209,16 @@ const Index = () => {
                 placeholder="Search for emergency services, locations, or keywords..."
                 className="w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               />
+            </div>
+
+            {/* Social Feed Section */}
+            <div className="mb-8">
+              <Card className="p-4">
+                <PostForm />
+              </Card>
+              <div className="mt-4">
+                <PostsList />
+              </div>
             </div>
 
             {/* Service Categories */}
