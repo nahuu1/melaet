@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Phone, LogOut, Home, Car, Mail, User, Search } from "lucide-react";
@@ -140,6 +141,16 @@ const Index = () => {
         </div>
       </header>
 
+      {/* Hero Map Section */}
+      <div className="w-full h-[60vh] relative">
+        {(!isMobile || (isMobile && showEmergencyForm)) && (
+          <EmergencyMapSection
+            onEmergencyClick={handleEmergencyClick}
+            translations={t}
+          />
+        )}
+      </div>
+
       <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
           {/* Left Sidebar */}
@@ -223,14 +234,6 @@ const Index = () => {
 
             {/* Service Categories */}
             <ServiceCategories translations={t} />
-
-            {/* Emergency Map - Now responsive for mobile */}
-            {(!isMobile || (isMobile && showEmergencyForm)) && (
-              <EmergencyMapSection
-                onEmergencyClick={handleEmergencyClick}
-                translations={t}
-              />
-            )}
 
             {/* Nearby Services Section */}
             <div className="mt-6 sm:mt-8">
