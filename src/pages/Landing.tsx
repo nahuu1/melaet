@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -17,6 +20,7 @@ const formSchema = z.object({
     message: "Password must be at least 6 characters.",
   }),
   phone: z.string().optional(),
+  userType: z.enum(["user", "worker"]),
 });
 
 export default function Landing() {
@@ -30,6 +34,7 @@ export default function Landing() {
       email: "",
       password: "",
       phone: "",
+      userType: "user",
     },
   });
 
@@ -38,7 +43,14 @@ export default function Landing() {
       if (isLogin) {
         await signIn(values.email, values.password);
       } else {
-        await signUp(values.email, values.password);
+        const userCredential = await signUp(values.email, values.password);
+        // Create user profile in Firestore
+        await setDoc(doc(db, "users", userCredential.user.uid), {
+          email: values.email,
+          userType: values.userType,
+          phone: values.phone,
+          createdAt: new Date(),
+        });
       }
       toast({
         title: isLogin ? "Login successful" : "Account created successfully",
@@ -150,6 +162,34 @@ export default function Landing() {
                           <FormControl>
                             <Input placeholder="Enter your phone number" className="border-green-200 focus:border-green-500" {...field} />
                           </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="userType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Account Type</FormLabel>
+                          <div className="flex gap-4">
+                            <Button
+                              type="button"
+                              variant={field.value === "user" ? "default" : "outline"}
+                              className={field.value === "user" ? "bg-green-500" : ""}
+                              onClick={() => form.setValue("userType", "user")}
+                            >
+                              Regular User
+                            </Button>
+                            <Button
+                              type="button"
+                              variant={field.value === "worker" ? "default" : "outline"}
+                              className={field.value === "worker" ? "bg-green-500" : ""}
+                              onClick={() => form.setValue("userType", "worker")}
+                            >
+                              Service Provider
+                            </Button>
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}

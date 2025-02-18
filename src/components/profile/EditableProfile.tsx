@@ -1,10 +1,15 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { toast } from '@/components/ui/use-toast';
-import { mockUsers } from '@/data/mockData';
+import { useAuth } from '@/contexts/AuthContext';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db } from '@/lib/firebase';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface ProfileData {
   displayName: string;
@@ -15,6 +20,7 @@ interface ProfileData {
     position: string;
     period: string;
   }[];
+  photoURL?: string;
 }
 
 const EditableProfile = () => {
@@ -23,7 +29,8 @@ const EditableProfile = () => {
     displayName: '',
     bio: '',
     skills: [],
-    workHistory: []
+    workHistory: [],
+    photoURL: '',
   });
   const [newSkill, setNewSkill] = useState('');
   const [newWorkHistory, setNewWorkHistory] = useState({
@@ -31,21 +38,56 @@ const EditableProfile = () => {
     position: '',
     period: ''
   });
+  
+  const { user } = useAuth();
+  const storage = getStorage();
 
   useEffect(() => {
-    // Simulate fetching profile data
-    const currentUser = mockUsers[0]; // Use first mock user as current user
-    setProfileData({
-      displayName: currentUser.displayName,
-      bio: currentUser.bio,
-      skills: currentUser.skills,
-      workHistory: currentUser.workHistory
-    });
-  }, []);
+    const fetchProfile = async () => {
+      if (user?.uid) {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setProfileData(docSnap.data() as ProfileData);
+        }
+      }
+    };
+    fetchProfile();
+  }, [user]);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!user?.uid || !e.target.files || !e.target.files[0]) return;
+
+    try {
+      const file = e.target.files[0];
+      const storageRef = ref(storage, `profile-pictures/${user.uid}`);
+      await uploadBytes(storageRef, file);
+      const photoURL = await getDownloadURL(storageRef);
+
+      // Update Firestore document
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, { photoURL });
+
+      setProfileData(prev => ({ ...prev, photoURL }));
+      toast({
+        title: "Success",
+        description: "Profile picture updated successfully"
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to upload profile picture"
+      });
+    }
+  };
 
   const handleSave = async () => {
+    if (!user?.uid) return;
+
     try {
-      // Simulate saving to backend
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, profileData);
       setIsEditing(false);
       toast({
         title: "Success",
@@ -94,6 +136,31 @@ const EditableProfile = () => {
       </div>
 
       <div className="space-y-6">
+        {/* Profile Picture */}
+        <div className="flex flex-col items-center gap-4">
+          <Avatar className="w-32 h-32">
+            <AvatarImage src={profileData.photoURL} />
+            <AvatarFallback>{profileData.displayName?.[0] || 'U'}</AvatarFallback>
+          </Avatar>
+          {isEditing && (
+            <div>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                id="profile-picture"
+              />
+              <Button
+                variant="outline"
+                onClick={() => document.getElementById('profile-picture')?.click()}
+              >
+                Change Profile Picture
+              </Button>
+            </div>
+          )}
+        </div>
+
         <div>
           <label className="block text-sm font-medium mb-2">Display Name</label>
           <Input
