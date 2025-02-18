@@ -44,13 +44,19 @@ export default function Landing() {
         await signIn(values.email, values.password);
       } else {
         const userCredential = await signUp(values.email, values.password);
-        // Create user profile in Firestore
-        await setDoc(doc(db, "users", userCredential.user.uid), {
-          email: values.email,
-          userType: values.userType,
-          phone: values.phone,
-          createdAt: new Date(),
-        });
+        if (userCredential.uid) {
+          // Create user profile in Firestore
+          await setDoc(doc(db, "users", userCredential.uid), {
+            email: values.email,
+            userType: values.userType,
+            phone: values.phone,
+            createdAt: new Date(),
+            displayName: '', // Add default values for profile fields
+            bio: '',
+            skills: [],
+            workHistory: [],
+          });
+        }
       }
       toast({
         title: isLogin ? "Login successful" : "Account created successfully",

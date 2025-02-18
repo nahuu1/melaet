@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { toast } from '@/components/ui/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db } from '@/lib/firebase';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -21,6 +21,10 @@ interface ProfileData {
     period: string;
   }[];
   photoURL?: string;
+  email?: string;
+  userType?: string;
+  phone?: string;
+  createdAt?: Date;
 }
 
 const EditableProfile = () => {
@@ -64,7 +68,7 @@ const EditableProfile = () => {
       await uploadBytes(storageRef, file);
       const photoURL = await getDownloadURL(storageRef);
 
-      // Update Firestore document
+      // Update Firestore document with photoURL only
       const userRef = doc(db, "users", user.uid);
       await updateDoc(userRef, { photoURL });
 
@@ -87,7 +91,16 @@ const EditableProfile = () => {
 
     try {
       const userRef = doc(db, "users", user.uid);
-      await updateDoc(userRef, profileData);
+      // Convert the profileData to a plain object with only the fields we want to update
+      const updateData = {
+        displayName: profileData.displayName,
+        bio: profileData.bio,
+        skills: profileData.skills,
+        workHistory: profileData.workHistory,
+        photoURL: profileData.photoURL,
+      };
+      
+      await setDoc(userRef, updateData, { merge: true });
       setIsEditing(false);
       toast({
         title: "Success",
