@@ -166,6 +166,7 @@ export const SidebarLink = ({
   onClick?: () => void;
 }) => {
   const { open, animate } = useSidebar();
+  
   return (
     <Link
       to={link.href}
@@ -177,16 +178,16 @@ export const SidebarLink = ({
       {...props}
     >
       {link.icon}
-      <span
+      <div 
         className={cn(
-          "text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0",
+          "text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre",
           {
-            hidden: animate && !open,
+            "hidden": animate && !open
           }
         )}
       >
         {link.label}
-      </span>
+      </div>
     </Link>
   );
 };
