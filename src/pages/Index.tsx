@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Phone, LogOut, Home, Car, Mail, User, Search } from "lucide-react";
@@ -66,7 +67,7 @@ const translations = {
       homeRepair: "የቤት ጥገና",
       security: "የጥበቃ አገልግሎት",
       painting: "ቀለም",
-      ተጨማሪ ስራዎች: "ተጨማሪ ስራዎች"
+      otherServices: "ተጨማሪ ስራዎች"
     }
   }
 };
