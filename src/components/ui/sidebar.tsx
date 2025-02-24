@@ -93,9 +93,10 @@ export const DesktopSidebar = ({
         "h-screen px-4 py-4 hidden md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 flex-shrink-0",
         className
       )}
-      style={{
+      animate={{
         width: animate ? (open ? "300px" : "60px") : "300px",
       }}
+      initial={false}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
       {...props}
@@ -178,11 +179,15 @@ export const SidebarLink = ({
       {...props}
     >
       {link.icon}
-      {(!animate || open) && (
-        <span className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre">
-          {link.label}
-        </span>
-      )}
+      <motion.span
+        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre"
+        animate={{ 
+          opacity: (!animate || open) ? 1 : 0,
+          display: (!animate || open) ? "block" : "none"
+        }}
+      >
+        {link.label}
+      </motion.span>
     </Link>
   );
 };
