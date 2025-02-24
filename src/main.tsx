@@ -1,3 +1,4 @@
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -10,6 +11,7 @@ import Services from "./pages/Services";
 import Orders from "./pages/Orders";
 import WorkerDashboard from "./pages/WorkerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import ProviderDashboard from "./pages/ProviderDashboard";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -46,6 +48,10 @@ const router = createBrowserRouter([
     path: "/admin",
     element: <AdminDashboard />,
   },
+  {
+    path: "/provider-dashboard",
+    element: <ProviderDashboard />,
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
