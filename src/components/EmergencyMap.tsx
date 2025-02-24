@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -12,82 +13,56 @@ const EmergencyMap = () => {
   const [showNavigation, setShowNavigation] = useState(false);
   const [showChat, setShowChat] = useState(false);
   
-  const userLocation = { lat: -8.783195, lng: 34.508523 };
+  // Addis Ababa coordinates
+  const userLocation = { lat: 9.0222, lng: 38.7468 };
   
-  // Mock emergency workers data
+  // Mock emergency workers data for Addis Ababa
   const workers: EmergencyWorker[] = [
     {
       id: 1,
-      name: "Dr. Sarah Johnson",
-      type: "Ambulance",
+      name: "Black Lion Hospital",
+      type: "Hospital",
       distance: 1.2,
-      location: { lat: userLocation.lat + 0.01, lng: userLocation.lng + 0.01 },
+      location: { lat: 9.0172, lng: 38.7488 },
       rating: 4.8,
-      yearsOfExperience: 8
+      yearsOfExperience: 50
     },
-      {
-        id: 2,
-        name: "Officer Michael Chen",
-        type: "Police",
-        distance: 1.5,
-        location: { lat: userLocation.lat - 0.01, lng: userLocation.lng + 0.015 },
-        rating: 4.9,
-        yearsOfExperience: 12
-      },
-      {
-        id: 3,
-        name: "Capt. James Wilson",
-        type: "Fire Brigade",
-        distance: 2.1,
-        location: { lat: userLocation.lat + 0.02, lng: userLocation.lng - 0.01 },
-        rating: 4.7,
-        yearsOfExperience: 15
-      },
-      {
-        id: 4,
-        name: "Dr. Emily Martinez",
-        type: "Ambulance",
-        distance: 2.4,
-        location: { lat: userLocation.lat - 0.015, lng: userLocation.lng - 0.02 },
-        rating: 4.6,
-        yearsOfExperience: 6
-      },
-      {
-        id: 5,
-        name: "Officer David Kim",
-        type: "Traffic Police",
-        distance: 2.8,
-        location: { lat: userLocation.lat + 0.025, lng: userLocation.lng + 0.02 },
-        rating: 4.5,
-        yearsOfExperience: 7
-      },
-      {
-        id: 6,
-        name: "Lt. Robert Brown",
-        type: "Fire Brigade",
-        distance: 3.2,
-        location: { lat: userLocation.lat - 0.02, lng: userLocation.lng + 0.03 },
-        rating: 4.9,
-        yearsOfExperience: 10
-      },
-      {
-        id: 7,
-        name: "Dr. Lisa Wong",
-        type: "Ambulance",
-        distance: 3.5,
-        location: { lat: userLocation.lat + 0.03, lng: userLocation.lng - 0.025 },
-        rating: 4.7,
-        yearsOfExperience: 9
-      },
-      {
-        id: 8,
-        name: "Officer Sarah Miller",
-        type: "Police",
-        distance: 3.8,
-        location: { lat: userLocation.lat - 0.025, lng: userLocation.lng - 0.03 },
-        rating: 4.8,
-        yearsOfExperience: 11
-      }
+    {
+      id: 2,
+      name: "Bole Police Station",
+      type: "Police",
+      distance: 1.5,
+      location: { lat: 9.0137, lng: 38.7892 },
+      rating: 4.9,
+      yearsOfExperience: 25
+    },
+    {
+      id: 3,
+      name: "St. Paul's Hospital",
+      type: "Hospital",
+      distance: 2.1,
+      location: { lat: 9.0299, lng: 38.7519 },
+      rating: 4.7,
+      yearsOfExperience: 40
+    },
+    {
+      id: 4,
+      name: "Kirkos Police Station",
+      type: "Police",
+      distance: 2.4,
+      location: { lat: 9.0185, lng: 38.7578 },
+      rating: 4.6,
+      yearsOfExperience: 20
+    },
+    {
+      id: 5,
+      name: "Zewditu Hospital",
+      type: "Hospital",
+      distance: 1.8,
+      location: { lat: 9.0135, lng: 38.7515 },
+      rating: 4.7,
+      yearsOfExperience: 35
+    }
   ];
 
   const chatHistory: ChatMessage[] = [
@@ -113,7 +88,9 @@ const EmergencyMap = () => {
       </Button>
 
       {/* Map View */}
-      <EmergencyMapView workers={workers} userLocation={userLocation} />
+      <div className="h-[400px]">
+        <EmergencyMapView workers={workers} userLocation={userLocation} />
+      </div>
 
       {/* Workers List */}
       <WorkersList
@@ -150,11 +127,6 @@ const EmergencyMap = () => {
         onOpenChange={setShowChat}
         messages={chatHistory}
       />
-
-      {/* Footer */}
-      <footer className="mt-8 text-center text-gray-600 py-4 border-t">
-        Made by Tech Space ET
-      </footer>
     </div>
   );
 };
